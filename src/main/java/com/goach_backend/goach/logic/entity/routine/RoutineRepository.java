@@ -1,6 +1,5 @@
 package com.goach_backend.goach.logic.entity.routine;
 
-import com.goach_backend.goach.logic.entity.exercise.Exercise;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
