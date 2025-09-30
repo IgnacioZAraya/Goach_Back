@@ -1,6 +1,6 @@
 package com.goach_backend.goach.logic.entity.muscle_group;
 
-public enum MuscleGroup {
+public enum MuscleGroupEnum {
     CHEST,
     FRONT_DELTOIDS,
     SIDE_DELTOIDS,

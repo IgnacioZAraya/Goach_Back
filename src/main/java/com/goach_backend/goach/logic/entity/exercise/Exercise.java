@@ -1,6 +1,6 @@
 package com.goach_backend.goach.logic.entity.exercise;
 
-import com.goach_backend.goach.logic.entity.muscle_group.MuscleGroup;
+import com.goach_backend.goach.logic.entity.muscle_group.MuscleGroupEnum;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -19,7 +19,7 @@ public class Exercise {
     private String name;
     @Column(name = "muscle_group", nullable = false)
     @Enumerated(EnumType.STRING)
-    private MuscleGroup muscleGroup;
+    private MuscleGroupEnum muscleGroup;
     @Column(nullable = false, length = 500)
     private  String description;
     @CreationTimestamp
@@ -50,11 +50,11 @@ public class Exercise {
         this.name = name;
     }
 
-    public MuscleGroup getMuscleGroup() {
+    public MuscleGroupEnum getMuscleGroup() {
         return muscleGroup;
     }
 
-    public void setMuscleGroup(MuscleGroup muscleGroup) {
+    public void setMuscleGroup(MuscleGroupEnum muscleGroup) {
         this.muscleGroup = muscleGroup;
     }
 
