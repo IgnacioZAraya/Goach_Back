@@ -61,5 +61,25 @@ public class TraineeRoutine {
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public OffsetDateTime getUpdatedAt() { return updatedAt; }
 
+    public void setId(TraineeRoutineId id) {
+        this.id = id;
+    }
+
+    public void setTrainee(User trainee) {
+        this.trainee = trainee;
+    }
+
+    public void setRoutine(Routine routine) {
+        this.routine = routine;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public void setAssignedAt(OffsetDateTime assignedAt) { this.assignedAt = assignedAt; }
 }
