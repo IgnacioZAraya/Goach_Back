@@ -38,6 +38,9 @@ public class User implements UserDetails {
     @Column(name = "is_active")
     private boolean isActive;
 
+    @Column(name = "is_owner")
+    private boolean isOwner;
+
     public User() {
 
     }
@@ -136,5 +139,13 @@ public class User implements UserDetails {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public boolean isOwner() {
+        return isOwner;
+    }
+
+    public void setOwner(boolean owner) {
+        isOwner = owner;
     }
 }
