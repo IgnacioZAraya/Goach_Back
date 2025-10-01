@@ -20,6 +20,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id")
     private UUID id;
+    @Column(nullable = false)
     private String name;
     @Column(unique = true, length = 150, nullable = false)
     private String email;
