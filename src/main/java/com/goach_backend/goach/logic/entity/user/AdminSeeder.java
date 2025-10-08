@@ -6,8 +6,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
     private final RoleEnum roleEnum;
@@ -33,6 +31,10 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
         superAdmin.setEmail("super.admin@gmail.com");
         superAdmin.setPassword("superadmin123");
         superAdmin.setRole(RoleEnum.ADMIN);
+
+        if(userRepository.findByEmail(superAdmin.getEmail()).isPresent()){
+            return;
+        }
 
         var user = new User();
         user.setName(superAdmin.getName());
