@@ -26,6 +26,10 @@ public class User implements UserDetails {
     private String email;
     @Column(nullable = false)
     private String password;
+    @Column
+    private String weight;
+    @Column
+    private String height;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
@@ -40,6 +44,8 @@ public class User implements UserDetails {
 
     @Column(name = "is_owner")
     private boolean isOwner;
+
+    private Integer privateCode;
 
     public User() {
 
@@ -147,5 +153,29 @@ public class User implements UserDetails {
 
     public void setOwner(boolean owner) {
         isOwner = owner;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public Integer getPrivateCode() {
+        return privateCode;
+    }
+
+    public void setPrivateCode(Integer privateCode) {
+        this.privateCode = privateCode;
     }
 }

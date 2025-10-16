@@ -1,5 +1,6 @@
 package com.goach_backend.goach.logic.entity.exercise;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.goach_backend.goach.logic.entity.muscle_group.MuscleGroupEnum;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,10 +11,11 @@ import java.util.UUID;
 
 @Table(name = "Exercise")
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "user_id")
+    @Column(name = "exercise_id")
     private UUID id;
     @Column(nullable = false)
     private String name;

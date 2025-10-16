@@ -44,6 +44,7 @@ public class SecurityConfiguration {
         config.addAllowedMethod("*");
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setExposedHeaders(List.of("Authorization"));
+        config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return source;
     }

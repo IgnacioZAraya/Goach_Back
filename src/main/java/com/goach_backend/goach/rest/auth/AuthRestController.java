@@ -7,15 +7,10 @@ import com.goach_backend.goach.logic.entity.user.LoginResponse;
 import com.goach_backend.goach.logic.entity.user.User;
 import com.goach_backend.goach.logic.entity.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.Optional;
 
 @RequestMapping("/auth")
@@ -57,24 +52,4 @@ public class AuthRestController {
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(savedUser);
     }
-
-//    @PostMapping("/refresh")
-//    public ResponseEntity<LoginResponse> refresh(@RequestBody Map<String, String> request) {
-//        String refreshToken = request.get("refreshToken");
-//        String username = jwtService.extractUsername(refreshToken);
-//
-//        Optional<User> userOpt = userRepository.findByEmail(username);
-//        if (userOpt.isPresent() && !jwtService.isTokenExpired(refreshToken)) {
-//            String newAccessToken = jwtService.generateAccessToken(userOpt.get());
-//
-//            LoginResponse response = new LoginResponse();
-//            response.setToken(newAccessToken);
-//            response.setRefreshToken(refreshToken); // keep same refresh
-//            response.setExpiresIn(jwtService.getExpirationTime());
-//            response.setAuthUser(userOpt.get());
-//
-//            return ResponseEntity.ok(response);
-//        }
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//    }
 }

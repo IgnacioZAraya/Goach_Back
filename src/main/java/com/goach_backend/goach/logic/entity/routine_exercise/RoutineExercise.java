@@ -14,6 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "RoutineExercise")
@@ -21,9 +22,9 @@ import java.util.List;
 public class RoutineExercise {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "routine_exercise_id")
-    private Long id;
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "routine_id", referencedColumnName = "routine_id", nullable = false)
@@ -85,7 +86,7 @@ public class RoutineExercise {
     }
 
     // getters/setters
-    public Long getId() { return id; }
+    public UUID getId() { return id; }
     public Routine getRoutine() { return routine; }
     public Exercise getExercise() { return exercise; }
     public Integer getOrderIndex() { return orderIndex; }
@@ -99,7 +100,7 @@ public class RoutineExercise {
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public OffsetDateTime getUpdatedAt() { return updatedAt; }
 
-    public void setId(Long id) { this.id = id; }
+    public void setId(UUID id) { this.id = id; }
     public void setRoutine(Routine routine) { this.routine = routine; }
     public void setExercise(Exercise exercise) { this.exercise = exercise; }
     public void setOrderIndex(Integer orderIndex) { this.orderIndex = orderIndex; }

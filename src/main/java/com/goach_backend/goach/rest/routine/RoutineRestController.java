@@ -41,7 +41,18 @@ public class RoutineRestController {
     @PostMapping
     @Transactional
     @PreAuthorize("hasRole('TRAINER')")
-    public ResponseEntity<Routine> createRoutine(@Valid @RequestBody Routine routine) {
+    public ResponseEntity<?> createRoutine(@Valid @RequestBody Routine routine) {
+        UUID trainerId = routine.getTrainer().getId();
+
+        Optional<User> trainer = userRepository.findById(trainerId);
+
+        if (trainer.isEmpty() || trainer.get().getRole() != RoleEnum.TRAINER){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "User not found or it is not a trainer"));
+        }
+
+        routine.setTrainer(trainer.get());
+
         Routine saved = routineRepository.save(routine);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
@@ -83,7 +94,7 @@ public class RoutineRestController {
         return ResponseEntity.ok(savedRoutine);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("delete/{id}")
     @Transactional
     @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
     public ResponseEntity<?> inactivateRoutine(

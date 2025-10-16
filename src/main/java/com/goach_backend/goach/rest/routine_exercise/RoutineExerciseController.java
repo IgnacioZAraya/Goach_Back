@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/routines/{routineId}/exercises")
+@RequestMapping("/routines/{routineId}/exercises")
 public class RoutineExerciseController {
 
     private final RoutineRepository routineRepository;
@@ -89,7 +89,7 @@ public class RoutineExerciseController {
         entity.setSupersetGroup(body.getSupersetGroup());
 
         RoutineExercise saved = routineExerciseRepository.save(entity);
-        return ResponseEntity.created(URI.create("/api/routines/" + routineId + "/exercises/" + saved.getId())).body(saved);
+        return ResponseEntity.created(URI.create("/routines/" + routineId + "/exercises/" + saved.getId())).body(saved);
     }
 
     @PutMapping("/{routineExerciseId}")

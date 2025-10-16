@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "RoutineExerciseSet")
@@ -17,9 +18,9 @@ import java.time.OffsetDateTime;
 public class RoutineExerciseSet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "set_id")
-    private Long id;
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "routine_exercise_id", nullable = false)
@@ -66,7 +67,7 @@ public class RoutineExerciseSet {
     public RoutineExerciseSet() {}
 
     // getters/setters
-    public Long getId() { return id; }
+    public UUID getId() { return id; }
     public RoutineExercise getRoutineExercise() { return routineExercise; }
     public Integer getSetNumber() { return setNumber; }
     public Integer getMinReps() { return minReps; }
@@ -79,7 +80,7 @@ public class RoutineExerciseSet {
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public OffsetDateTime getUpdatedAt() { return updatedAt; }
 
-    public void setId(Long id) { this.id = id; }
+    public void setI(UUID id) { this.id = id; }
     public void setRoutineExercise(RoutineExercise routineExercise) { this.routineExercise = routineExercise; }
     public void setSetNumber(Integer setNumber) { this.setNumber = setNumber; }
     public void setMinReps(Integer minReps) { this.minReps = minReps; }

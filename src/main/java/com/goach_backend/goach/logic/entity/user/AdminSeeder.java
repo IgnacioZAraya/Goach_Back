@@ -31,6 +31,8 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
         superAdmin.setEmail("super.admin@gmail.com");
         superAdmin.setPassword("superadmin123");
         superAdmin.setRole(RoleEnum.ADMIN);
+        superAdmin.setHeight("1.96m");
+        superAdmin.setWeight("105kg");
 
         if(userRepository.findByEmail(superAdmin.getEmail()).isPresent()){
             return;
@@ -41,6 +43,8 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
         user.setEmail(superAdmin.getEmail());
         user.setPassword(passwordEncoder.encode(superAdmin.getPassword()));
         user.setRole(superAdmin.getRole());
+        user.setHeight(superAdmin.getHeight());
+        user.setWeight(superAdmin.getWeight());
 
         userRepository.save(user);
     }
