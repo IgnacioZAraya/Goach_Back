@@ -2,12 +2,10 @@ package com.goach_backend.goach.rest.set_exercise;
 
 import com.goach_backend.goach.logic.entity.exercise.Exercise;
 import com.goach_backend.goach.logic.entity.exercise.ExerciseRepository;
-import com.goach_backend.goach.logic.entity.routine.RoutineRepository;
 import com.goach_backend.goach.logic.entity.set_exercise.SetExercise;
 import com.goach_backend.goach.logic.entity.set_exercise.SetExerciseRepository;
 import com.goach_backend.goach.logic.entity.set_exercise.Set;
 import com.goach_backend.goach.logic.entity.set_exercise.SetRepository;
-import com.sendgrid.Response;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
