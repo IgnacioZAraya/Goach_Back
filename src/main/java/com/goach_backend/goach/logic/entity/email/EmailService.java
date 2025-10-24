@@ -15,16 +15,16 @@ import java.io.IOException;
 
 @Service
 public class EmailService {
-    private static final Logger logger =  LoggerFactory.getLogger(EmailService.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     public String sendTextEmail(String userEmail, int code) throws IOException {
-        Email from = new Email("izeladaa@ucenfotec.ac.cr");
+        Email from = new Email("igna8.1@outlook.com");
         String subject = "Your Private Code!";
         Email to = new Email(userEmail);
         Content content = new Content("text/plain", "Here's the code for setting your new password: " + code);
         Mail mail = new Mail(from, subject, to, content);
 
-        SendGrid sg = new SendGrid("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");
+        SendGrid sg = new SendGrid("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");
         Request request = new Request();
         try {
             request.setMethod(Method.POST);

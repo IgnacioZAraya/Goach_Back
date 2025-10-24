@@ -1,0 +1,125 @@
+package com.goach_backend.goach.rest.set_exercise;
+
+import com.goach_backend.goach.logic.entity.exercise.Exercise;
+import com.goach_backend.goach.logic.entity.exercise.ExerciseRepository;
+import com.goach_backend.goach.logic.entity.routine.RoutineRepository;
+import com.goach_backend.goach.logic.entity.set_exercise.SetExercise;
+import com.goach_backend.goach.logic.entity.set_exercise.SetExerciseRepository;
+import com.goach_backend.goach.logic.entity.set_exercise.Set;
+import com.goach_backend.goach.logic.entity.set_exercise.SetRepository;
+import com.sendgrid.Response;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/set/{setId}/exercises")
+public class SetExerciseController {
+
+    private final ExerciseRepository exerciseRepository;
+    private final SetExerciseRepository setExerciseRepository;
+    private final SetRepository setRepository;
+
+    public SetExerciseController(ExerciseRepository exerciseRepository,
+                                 SetExerciseRepository setExerciseRepository,
+                                 SetRepository setRepository) {
+        this.exerciseRepository = exerciseRepository;
+        this.setExerciseRepository = setExerciseRepository;
+        this.setRepository = setRepository;
+    }
+
+    // ---------- Exercises ----------
+
+    @GetMapping
+    public List<SetExercise> list(@PathVariable UUID setId) {
+        return setExerciseRepository.findBySet_IdOrderByOrderIndexAsc(setId);
+    }
+
+    @GetMapping("/{setExerciseId}")
+    public SetExercise get(@PathVariable UUID setId, @PathVariable UUID setExerciseId) {
+        SetExercise e = setExerciseRepository.findById(setExerciseId)
+                .orElseThrow(() -> new IllegalArgumentException("SetExercise no existe"));
+        if (!e.getSet().getId().equals(setId)) {
+            throw new IllegalArgumentException("El ejercicio no pertenece al set");
+        }
+        return e;
+    }
+
+    /**
+     * Crea un RoutineExercise. Se toma la rutina del path y el ejercicio del body por su ID.
+     * Body esperado (ejemplo mínimo):
+     * {
+     * "exercise": {"id": 5},
+     * "orderIndex": 1,
+     * "defaultRestSec": 90,
+     * "tempo": "3-0-3",
+     * "block": "A",
+     * "supersetGroup": "A1"
+     * }
+     */
+    @PostMapping
+    @Transactional
+    public ResponseEntity<SetExercise> create(@PathVariable UUID setId,
+                                              @Valid @RequestBody SetExercise body) {
+        Set set = setRepository.findById(setId)
+                .orElseThrow(() -> new IllegalArgumentException("Set no existe"));
+        if (body.getExercise() == null || body.getExercise().getId() == null) {
+            throw new IllegalArgumentException("Debe indicar exercise.id");
+        }
+        Exercise exercise = exerciseRepository.findById(body.getExercise().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Exercise no existe"));
+
+        SetExercise entity = SetExercise.builder().set(set)
+                .exercise(exercise)
+                .orderIndex(body.getOrderIndex())
+                .targetRPE(body.getTargetRPE())
+                .targetRIR(body.getTargetRIR())
+                .targetPRM(body.getTargetPRM())
+                .createdAt(OffsetDateTime.now())
+                .minReps(body.getMinReps())
+                .maxReps(body.getMaxReps())
+                .duration(body.getDuration())
+                .maxWeight(body.getMaxWeight())
+                .minWeight(body.getMinWeight())
+                .build();
+
+        SetExercise saved = setExerciseRepository.save(entity);
+        return ResponseEntity.created(URI.create("/sets/" + setId + "/exercises/" + saved.getId())).body(saved);
+    }
+
+    @PutMapping("/{routineExerciseId}")
+    @Transactional
+    public SetExercise update(@PathVariable UUID setId,
+                              @PathVariable UUID routineExerciseId,
+                              @Valid @RequestBody SetExercise body) {
+        SetExercise entity = get(setId, routineExerciseId);
+
+        // si viene exercise.id, lo actualizamos
+        if (body.getExercise() != null && body.getExercise().getId() != null) {
+            Exercise ex = exerciseRepository.findById(body.getExercise().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Exercise no existe"));
+            e.setExercise(ex);
+        }
+        if (body.getOrderIndex() != null) e.setOrderIndex(body.getOrderIndex());
+        if (body.getDefaultRestSec() != null) e.setDefaultRestSec(body.getDefaultRestSec());
+        if (body.getTargetRpe() != null) e.setTargetRpe(body.getTargetRpe());
+        if (body.getTargetRir() != null) e.setTargetRir(body.getTargetRir());
+        if (body.getTempo() != null) e.setTempo(body.getTempo());
+        if (body.getBlock() != null) e.setBlock(body.getBlock());
+        if (body.getSupersetGroup() != null) e.setSupersetGroup(body.getSupersetGroup());
+
+        return e;
+    }
+
+    @DeleteMapping("/{setExerciseId}")
+    public ResponseEntity<Void> delete(@PathVariable UUID setId, @PathVariable UUID setExerciseId) {
+        SetExercise e = get(setId, setExerciseId);
+        setExerciseRepository.delete(e);
+        return ResponseEntity.noContent().build();
+    }
+}

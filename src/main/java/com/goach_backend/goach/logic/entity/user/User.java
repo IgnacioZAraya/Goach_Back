@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Table(name="Users")
+@Table(name = "Users")
 @Entity
 public class User implements UserDetails {
     @Id
@@ -37,7 +37,7 @@ public class User implements UserDetails {
     @Column(updatable = false, name = "created_at")
     private Date createdAt;
     @UpdateTimestamp
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     private Date updatedAt;
     @Column(name = "is_active")
     private boolean isActive;
@@ -45,6 +45,7 @@ public class User implements UserDetails {
     @Column(name = "is_owner")
     private boolean isOwner;
 
+    @Column(name = "private_code")
     private Integer privateCode;
 
     public User() {
@@ -77,7 +78,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+role.name());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.name());
         return List.of(authority);
     }
 
