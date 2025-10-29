@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Table(name="Users")
+@Table(name = "Users")
 @Entity
 public class User implements UserDetails {
     @Id
@@ -26,6 +26,10 @@ public class User implements UserDetails {
     private String email;
     @Column(nullable = false)
     private String password;
+    @Column
+    private String weight;
+    @Column
+    private String height;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
@@ -33,13 +37,16 @@ public class User implements UserDetails {
     @Column(updatable = false, name = "created_at")
     private Date createdAt;
     @UpdateTimestamp
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     private Date updatedAt;
     @Column(name = "is_active")
     private boolean isActive;
 
     @Column(name = "is_owner")
     private boolean isOwner;
+
+    @Column(name = "private_code")
+    private Integer privateCode;
 
     public User() {
 
@@ -71,7 +78,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+role.name());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.name());
         return List.of(authority);
     }
 
@@ -147,5 +154,29 @@ public class User implements UserDetails {
 
     public void setOwner(boolean owner) {
         isOwner = owner;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public Integer getPrivateCode() {
+        return privateCode;
+    }
+
+    public void setPrivateCode(Integer privateCode) {
+        this.privateCode = privateCode;
     }
 }

@@ -1,4 +1,5 @@
 package com.goach_backend.goach.rest.trainee_routine;
+
 import com.goach_backend.goach.logic.entity.routine.Routine;
 import com.goach_backend.goach.logic.entity.routine.RoutineRepository;
 import com.goach_backend.goach.logic.entity.trainee_routine.TraineeRoutine;
@@ -35,10 +36,10 @@ public class TraineeRoutineController {
 
     /* ========= READ ========= */
 
-    @GetMapping("/trainee/{traineeId}")
+    /*@GetMapping("/trainee/{traineeId}")
     public List<TraineeRoutine> listByTrainee(@PathVariable UUID traineeId) {
         return repo.findByIdTraineeId(traineeId);
-    }
+    }*/
 
     @GetMapping("/routine/{routineId}")
     public List<TraineeRoutine> listByRoutine(@PathVariable UUID routineId) {
@@ -58,7 +59,7 @@ public class TraineeRoutineController {
      * - trainee.userId
      * - routine.routineId
      * - assignedAt (si es null, se colocará ahora)
-     *
+     * <p>
      * Se puede enviar también el id embebido; si no viene, se arma con los IDs anteriores.
      */
     @PostMapping
@@ -77,7 +78,7 @@ public class TraineeRoutineController {
             body.setId(new TraineeRoutineId(traineeId, routineId));
         } else {
             traineeId = body.getId().getTraineeId();
-            routineId  = body.getId().getRoutineId();
+            routineId = body.getId().getRoutineId();
         }
         if (repo.existsByIdTraineeIdAndIdRoutineId(traineeId, routineId)) {
             return repo.findById(new TraineeRoutineId(traineeId, routineId)).get();
