@@ -24,7 +24,7 @@ public class EmailService {
         Content content = new Content("text/plain", "Here's the code for setting your new password: " + code);
         Mail mail = new Mail(from, subject, to, content);
 
-        SendGrid sg = new SendGrid("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");
+        /*SendGrid sg = new SendGrid("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");
         Request request = new Request();
         try {
             request.setMethod(Method.POST);
@@ -35,6 +35,7 @@ public class EmailService {
             return response.getBody();
         } catch (IOException ex) {
             throw ex;
-        }
+        }*/
+        return "";
     }
 }
