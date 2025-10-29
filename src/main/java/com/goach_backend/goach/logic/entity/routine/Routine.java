@@ -2,6 +2,8 @@ package com.goach_backend.goach.logic.entity.routine;
 
 import com.goach_backend.goach.logic.entity.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -34,6 +36,8 @@ public class Routine {
     @Column(nullable = false, name = "total_time")
     private Time totalTime;
     @Column(name = "total_rpe")
+    @Min(value = 0, message = "El RPE no puede ser negativo.")
+    @Max(value = 10, message = "El RPE no puede ser mayor a 10")
     private Integer totalRPE;
     @Column(name = "total_rir")
     private Integer totalRIR;

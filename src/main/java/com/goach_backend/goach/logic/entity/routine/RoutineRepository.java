@@ -9,4 +9,7 @@ import java.util.UUID;
 public interface RoutineRepository extends JpaRepository<Routine, UUID> {
     @Query("SELECT r FROM Routine r WHERE LOWER(r.name) LIKE %?1%")
     List<Routine> findRoutineByName(String character);
+
+    @Query("SELECT r FROM Routine r WHERE r.trainer.id = ?1")
+    List<Routine> findRoutineByTrainerId(UUID trainerId);
 }

@@ -3,6 +3,8 @@ package com.goach_backend.goach.rest.routine;
 import com.goach_backend.goach.logic.entity.role.RoleEnum;
 import com.goach_backend.goach.logic.entity.routine.Routine;
 import com.goach_backend.goach.logic.entity.routine.RoutineRepository;
+import com.goach_backend.goach.logic.entity.trainee_routine.TraineeRoutine;
+import com.goach_backend.goach.logic.entity.trainee_routine.TraineeRoutineRepository;
 import com.goach_backend.goach.logic.entity.user.User;
 import com.goach_backend.goach.logic.entity.user.UserRepository;
 import jakarta.validation.Valid;
@@ -28,25 +30,39 @@ public class RoutineRestController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TraineeRoutineRepository traineeRoutineRepository;
+
     @GetMapping
-    public List<Routine> getAllRoutines(){
+    public List<Routine> getAllRoutines() {
         return routineRepository.findAll();
     }
 
     @GetMapping("/filterByName/{name}")
-    public List<Routine> getExerciseByName(@PathVariable String name) {
+    public List<Routine> getRoutineByName(@PathVariable String name) {
         return routineRepository.findRoutineByName(name);
+    }
+
+    @GetMapping("/filterByUser/{userId}")
+    public ResponseEntity<?> getRoutineByUserId(@PathVariable UUID userId) {
+        List<Routine> r = routineRepository.findRoutineByTrainerId(userId);
+
+        if (r.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Trainer doesn't have any assigned routines"));
+        }
+
+        return ResponseEntity.ok(r);
     }
 
     @PostMapping
     @Transactional
-    @PreAuthorize("hasRole('TRAINER')")
+    @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
     public ResponseEntity<?> createRoutine(@Valid @RequestBody Routine routine) {
         UUID trainerId = routine.getTrainer().getId();
 
         Optional<User> trainer = userRepository.findById(trainerId);
 
-        if (trainer.isEmpty() || trainer.get().getRole() != RoleEnum.TRAINER){
+        if (trainer.isEmpty() || trainer.get().getRole() != RoleEnum.TRAINER) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "User not found or it is not a trainer"));
         }

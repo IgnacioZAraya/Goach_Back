@@ -1,5 +1,6 @@
 package com.goach_backend.goach.rest.set;
 
+import com.goach_backend.goach.logic.entity.exercise.Exercise;
 import com.goach_backend.goach.logic.entity.exercise.ExerciseRepository;
 import com.goach_backend.goach.logic.entity.routine.Routine;
 import com.goach_backend.goach.logic.entity.routine.RoutineRepository;
@@ -32,15 +33,14 @@ public class SetController {
         return setRepository.findAll();
     }
 
-    @GetMapping("/{routineId}")
+    @GetMapping("/filterByRoutine/{routineId}")
     public List<?> listRoutineSet(@PathVariable UUID routineId) {
-        Optional<Routine> auxRoutine = routineRepository.findById(routineId);
-
-        if (auxRoutine.isEmpty()) {
-            return Collections.singletonList(ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "La rutina no fue encontrada")));
+        if (!routineRepository.existsById(routineId)) {
+            return Collections.singletonList(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "La rutina no fue encontrada")));
         }
 
-        return setRepository.findByRoutine_IdOrderBySetNumberAsc(auxRoutine.get().getId());
+        return ResponseEntity.ok(setRepository.findByRoutine_IdOrderBySetNumberAsc(routineId)).getBody();
     }
 
     /**
@@ -61,7 +61,6 @@ public class SetController {
                 .targetRIR(body.getTargetRIR())
                 .targetRPE(body.getTargetRPE())
                 .restTime(body.getRestTime())
-                .createdAt(OffsetDateTime.now())
                 .workTime(body.getWorkTime())
                 .targetRPE(body.getTargetRPE())
                 .targetRIR(body.getTargetRIR())
@@ -77,9 +76,9 @@ public class SetController {
 
     @PutMapping("/{setId}/routine/{routineId}")
     @Transactional
-    public Set updateSet(@PathVariable UUID routineId,
-                         @PathVariable UUID setId,
-                         @Valid @RequestBody Set body) {
+    public ResponseEntity<?> updateSet(@PathVariable UUID routineId,
+                                       @PathVariable UUID setId,
+                                       @Valid @RequestBody Set body) {
         Set s = setRepository.findById(setId)
                 .orElseThrow(() -> new IllegalArgumentException("Set no existe"));
         if (!s.getRoutine().getId().equals(routineId)) {
@@ -92,7 +91,8 @@ public class SetController {
         if (body.getTargetRIR() != null) s.setTargetRIR(body.getTargetRIR());
         if (body.getTargetPRM() != null) s.setTargetPRM(body.getTargetPRM());
 
-        return s;
+        Set saved = setRepository.save(s);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @DeleteMapping("/{setId}/routine/{routineId}")
