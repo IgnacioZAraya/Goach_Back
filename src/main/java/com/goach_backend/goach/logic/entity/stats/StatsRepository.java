@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface StatsRepository extends JpaRepository<Stats, UUID> {
@@ -13,4 +14,5 @@ public interface StatsRepository extends JpaRepository<Stats, UUID> {
     List<Stats> findStatsByWorkout(String character);
     @Query("SELECT stts FROM Stats stts JOIN FETCH stts.workout wss WHERE wss.routine.name LIKE %:routineName% AND wss.finishedAt = :statsCompletion")
     List<Stats> findStatsByWorkout_RoutineAndCompletedAt(@Param("routineName") String routineName, @Param("statsCompletion") Date completedAt);
+    Optional<Stats> findByWorkout_Id(UUID workoutId);
 }
