@@ -4,6 +4,7 @@ import com.goach_backend.goach.logic.entity.email.EmailService;
 import com.goach_backend.goach.logic.entity.role.RoleEnum;
 import com.goach_backend.goach.logic.entity.user.User;
 import com.goach_backend.goach.logic.entity.user.UserRepository;
+import com.goach_backend.goach.logic.sockets.LinkSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ public class UserRestController {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private LinkSocketHandler socketHandler;
 
     @PostMapping
     public User addUser(@RequestBody User user) {

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -90,7 +91,7 @@ public class SetExerciseController {
         return ResponseEntity.created(URI.create("/sets/" + setId + "/exercises/" + saved.getId())).body(saved);
     }
 
-    @PutMapping("/{routineExerciseId}")
+   /* @PutMapping("/{routineExerciseId}")
     @Transactional
     public SetExercise update(@PathVariable UUID setId,
                               @PathVariable UUID routineExerciseId,
@@ -101,14 +102,14 @@ public class SetExerciseController {
         if (body.getExercise() != null && body.getExercise().getId() != null) {
             Exercise ex = exerciseRepository.findById(body.getExercise().getId())
                     .orElseThrow(() -> new IllegalArgumentException("Exercise no existe"));
-            e.setExercise(ex);
+            entity.setExercise(ex);
         }
-        if (body.getOrderIndex() != null) e.setOrderIndex(body.getOrderIndex());
-        if (body.getDefaultRestSec() != null) e.setDefaultRestSec(body.getDefaultRestSec());
-        if (body.getTargetRpe() != null) e.setTargetRpe(body.getTargetRpe());
-        if (body.getTargetRir() != null) e.setTargetRir(body.getTargetRir());
-        if (body.getTempo() != null) e.setTempo(body.getTempo());
-        if (body.getBlock() != null) e.setBlock(body.getBlock());
+        if (body.getOrderIndex() != null) entity.setOrderIndex(body.getOrderIndex());
+        if (body.getDuration()!= null) entity.setDuration(body.getDefaultRestSec());
+        if (body.getTargetRpe() != null) entity.setTargetRpe(body.getTargetRpe());
+        if (body.getTargetRir() != null) entity.setTargetRir(body.getTargetRir());
+        if (body.getTempo() != null) entity.setTempo(body.getTempo());
+        if (body.getBlock() != null) entity.setBlock(body.getBlock());
         if (body.getSupersetGroup() != null) e.setSupersetGroup(body.getSupersetGroup());
 
         return e;
@@ -119,5 +120,5 @@ public class SetExerciseController {
         SetExercise e = get(setId, setExerciseId);
         setExerciseRepository.delete(e);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 }

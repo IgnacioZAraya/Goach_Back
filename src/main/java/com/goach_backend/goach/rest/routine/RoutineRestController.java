@@ -47,10 +47,6 @@ public class RoutineRestController {
     public ResponseEntity<?> getRoutineByUserId(@PathVariable UUID userId) {
         List<Routine> r = routineRepository.findRoutineByTrainerId(userId);
 
-        if (r.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Trainer doesn't have any assigned routines"));
-        }
-
         return ResponseEntity.ok(r);
     }
 

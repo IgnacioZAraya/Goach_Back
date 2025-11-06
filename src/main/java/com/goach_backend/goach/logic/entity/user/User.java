@@ -1,5 +1,6 @@
 package com.goach_backend.goach.logic.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.goach_backend.goach.logic.entity.role.RoleEnum;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -76,6 +77,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.name());

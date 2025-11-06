@@ -1,5 +1,6 @@
 package com.goach_backend.goach.logic.entity.gym_trio.trainer_trainee;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.goach_backend.goach.logic.entity.user.User;
 import com.goach_backend.goach.logic.enums.AssocStatus;
 import com.goach_backend.goach.logic.enums.MembershipState;
@@ -20,11 +21,13 @@ public class TrainerTrainee {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @MapsId("trainerId")
     @JoinColumn(name = "trainer_id", referencedColumnName = "user_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User trainer;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @MapsId("traineeId")
     @JoinColumn(name = "trainee_id", referencedColumnName = "user_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User trainee;
 
     @Enumerated(EnumType.STRING)
@@ -48,7 +51,8 @@ public class TrainerTrainee {
     @PastOrPresent
     private OffsetDateTime updatedAt;
 
-    public TrainerTrainee() {}
+    public TrainerTrainee() {
+    }
 
     public TrainerTrainee(User trainer, User trainee) {
         this.trainer = trainer;
@@ -57,20 +61,67 @@ public class TrainerTrainee {
     }
 
     // Getters / Setters
-    public TrainerTraineeId getId() { return id; }
-    public void setId(TrainerTraineeId id) { this.id = id; }
-    public User getTrainer() { return trainer; }
-    public void setTrainer(User trainer) { this.trainer = trainer; }
-    public User getTrainee() { return trainee; }
-    public void setTrainee(User trainee) { this.trainee = trainee; }
-    public AssocStatus getTraineeStatus() { return traineeStatus; }
-    public void setTraineeStatus(AssocStatus traineeStatus) { this.traineeStatus = traineeStatus; }
-    public OffsetDateTime getTraineePaymentDate() { return traineePaymentDate; }
-    public void setTraineePaymentDate(OffsetDateTime traineePaymentDate) { this.traineePaymentDate = traineePaymentDate; }
-    public MembershipState getTraineePaymentStatus() { return traineePaymentStatus; }
-    public void setTraineePaymentStatus(MembershipState traineePaymentStatus) { this.traineePaymentStatus = traineePaymentStatus; }
-    public OffsetDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
-    public OffsetDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public TrainerTraineeId getId() {
+        return id;
+    }
+
+    public void setId(TrainerTraineeId id) {
+        this.id = id;
+    }
+
+    public User getTrainer() {
+        return trainer;
+    }
+
+    public void setTrainer(User trainer) {
+        this.trainer = trainer;
+    }
+
+    public User getTrainee() {
+        return trainee;
+    }
+
+    public void setTrainee(User trainee) {
+        this.trainee = trainee;
+    }
+
+    public AssocStatus getTraineeStatus() {
+        return traineeStatus;
+    }
+
+    public void setTraineeStatus(AssocStatus traineeStatus) {
+        this.traineeStatus = traineeStatus;
+    }
+
+    public OffsetDateTime getTraineePaymentDate() {
+        return traineePaymentDate;
+    }
+
+    public void setTraineePaymentDate(OffsetDateTime traineePaymentDate) {
+        this.traineePaymentDate = traineePaymentDate;
+    }
+
+    public MembershipState getTraineePaymentStatus() {
+        return traineePaymentStatus;
+    }
+
+    public void setTraineePaymentStatus(MembershipState traineePaymentStatus) {
+        this.traineePaymentStatus = traineePaymentStatus;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

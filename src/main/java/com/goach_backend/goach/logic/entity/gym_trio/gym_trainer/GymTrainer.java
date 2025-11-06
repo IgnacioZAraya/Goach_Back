@@ -10,6 +10,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -41,36 +42,97 @@ public class GymTrainer {
     @Column(name = "gym_payment_status")
     private MembershipState gymPaymentStatus;
 
+    @Column(name = "gym_payment_price", precision = 12, scale = 2)
+    private BigDecimal gymPaymentPrice;
+
     @CreationTimestamp
-    @Column(name="created_at", updatable=false)
+    @Column(name = "created_at", updatable = false)
     @PastOrPresent
     private OffsetDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     @PastOrPresent
     private OffsetDateTime updatedAt;
 
-    public GymTrainer() {}
-    public GymTrainer(Gym gym, User trainer){
-        this.gym = gym; this.trainer = trainer;
+    public GymTrainer() {
+    }
+
+    public GymTrainer(Gym gym, User trainer) {
+        this.gym = gym;
+        this.trainer = trainer;
         this.id = new GymTrainerId(gym.getId(), trainer.getId());
     }
 
-    public GymTrainerId getId() { return id; }
-    public void setId(GymTrainerId id) { this.id = id; }
-    public Gym getGym() { return gym; }
-    public void setGym(Gym gym) { this.gym = gym; }
-    public User getTrainer() { return trainer; }
-    public void setTrainer(User trainer) { this.trainer = trainer; }
-    public AssocStatus getAssociateStatus() { return associateStatus; }
-    public void setAssociateStatus(AssocStatus associateStatus) { this.associateStatus = associateStatus; }
-    public OffsetDateTime getGymPaymentDate() { return gymPaymentDate; }
-    public void setGymPaymentDate(OffsetDateTime gymPaymentDate) { this.gymPaymentDate = gymPaymentDate; }
-    public MembershipState getGymPaymentStatus() { return gymPaymentStatus; }
-    public void setGymPaymentStatus(MembershipState gymPaymentStatus) { this.gymPaymentStatus = gymPaymentStatus; }
-    public OffsetDateTime getCreatedAt() { return createdAt; }
-    public OffsetDateTime getUpdatedAt() { return updatedAt; }
-    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
-    public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public GymTrainerId getId() {
+        return id;
+    }
+
+    public void setId(GymTrainerId id) {
+        this.id = id;
+    }
+
+    public Gym getGym() {
+        return gym;
+    }
+
+    public void setGym(Gym gym) {
+        this.gym = gym;
+    }
+
+    public User getTrainer() {
+        return trainer;
+    }
+
+    public void setTrainer(User trainer) {
+        this.trainer = trainer;
+    }
+
+    public AssocStatus getAssociateStatus() {
+        return associateStatus;
+    }
+
+    public void setAssociateStatus(AssocStatus associateStatus) {
+        this.associateStatus = associateStatus;
+    }
+
+    public OffsetDateTime getGymPaymentDate() {
+        return gymPaymentDate;
+    }
+
+    public void setGymPaymentDate(OffsetDateTime gymPaymentDate) {
+        this.gymPaymentDate = gymPaymentDate;
+    }
+
+    public MembershipState getGymPaymentStatus() {
+        return gymPaymentStatus;
+    }
+
+    public void setGymPaymentStatus(MembershipState gymPaymentStatus) {
+        this.gymPaymentStatus = gymPaymentStatus;
+    }
+
+    public BigDecimal getGymPaymentPrice() {
+        return gymPaymentPrice;
+    }
+
+    public void setGymPaymentPrice(BigDecimal gymPaymentPrice) {
+        this.gymPaymentPrice = gymPaymentPrice;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

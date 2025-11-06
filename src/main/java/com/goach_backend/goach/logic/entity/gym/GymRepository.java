@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface GymRepository extends JpaRepository<Gym, UUID> {
     @Query("SELECT g FROM Gym g WHERE LOWER(g.name) LIKE %?1%")
     List<Gym> findGymByName(String character);
+
+    Gym findByOwner_Id(UUID ownerId);
 }

@@ -5,30 +5,47 @@ import com.goach_backend.goach.logic.entity.gym_trio.trainer_trainee.TrainerTrai
 import com.goach_backend.goach.logic.entity.gym_trio.trainer_trainee.TrainerTraineeRepository;
 import com.goach_backend.goach.logic.entity.user.User;
 import com.goach_backend.goach.logic.entity.user.UserRepository;
+import com.goach_backend.goach.logic.sockets.LinkSocketHandler;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
-@RequestMapping("/api/trainers/{trainerId}/trainees")
+@RequestMapping("trainers/{trainerId}/trainees")
 public class TrainerTraineeController {
 
     private final UserRepository userRepository;
     private final TrainerTraineeRepository trainerTraineeRepository;
+    private final LinkSocketHandler linkSocketHandler;
 
     public TrainerTraineeController(UserRepository userRepository,
-                                    TrainerTraineeRepository trainerTraineeRepository) {
+                                    TrainerTraineeRepository trainerTraineeRepository,
+                                    LinkSocketHandler linkSocketHandler) {
         this.userRepository = userRepository;
         this.trainerTraineeRepository = trainerTraineeRepository;
+        this.linkSocketHandler = linkSocketHandler;
     }
 
     @GetMapping
-    public List<TrainerTrainee> listByTrainer(@PathVariable UUID trainerId) {
-        return trainerTraineeRepository.findByTrainer_Id(trainerId);
+    public ResponseEntity<List<TrainerTrainee>> listByTrainer(@PathVariable UUID trainerId) {
+        List<TrainerTrainee> ttList = trainerTraineeRepository.findByTrainer_Id(trainerId);
+
+        if (ttList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.emptyList());
+        }
+
+        ttList.forEach(tt -> {
+            Optional<User> trainee = userRepository.findById(tt.getId().getTraineeId());
+            trainee.ifPresent(tt::setTrainee);
+        });
+
+        return ResponseEntity.ok(ttList);
     }
+
 
     @GetMapping("/{traineeId}")
     public TrainerTrainee get(@PathVariable UUID trainerId, @PathVariable UUID traineeId) {
@@ -40,9 +57,9 @@ public class TrainerTraineeController {
      * Crea la relación.
      * Body mínimo:
      * { "trainee": { "id": 123 },
-     *   "traineeStatus": "ACTIVE",
-     *   "traineePaymentStatus": "PAID",
-     *   "traineePaymentDate": "2025-10-14T12:00:00-06:00"
+     * "traineeStatus": "ACTIVE",
+     * "traineePaymentStatus": "PAID",
+     * "traineePaymentDate": "2025-10-14T12:00:00-06:00"
      * }
      */
     @PostMapping
@@ -63,8 +80,34 @@ public class TrainerTraineeController {
         entity.setTraineePaymentDate(body.getTraineePaymentDate());
 
         TrainerTrainee saved = trainerTraineeRepository.save(entity);
-        return ResponseEntity.created(URI.create("/api/trainers/" + trainerId + "/trainees/" + trainee.getId()))
+        return ResponseEntity.created(URI.create("trainers/" + trainerId + "/trainees/" + trainee.getId()))
                 .body(saved);
+    }
+
+    @PostMapping("/linkRequest")
+    public ResponseEntity<?> sendLinkRequest(@PathVariable UUID trainerId, @RequestBody User receiver) {
+        User sender = userRepository.findById(trainerId).orElseThrow(() -> new IllegalArgumentException("Este trainer no existe"));
+        User auxReceiver = userRepository.findByEmail(receiver.getEmail()).orElseThrow(() -> new IllegalArgumentException("Este usuario con " + receiver.getEmail() + " no existe"));
+
+        linkSocketHandler.sendToUser(receiver.getId(), Map.of(
+                "type", "link_request",
+                "data", Map.of(
+                        "senderId", sender.getId(),
+                        "senderName", sender.getName(),
+                        "receiverId", receiver.getId()
+                )
+        ));
+
+        return ResponseEntity.ok(Map.of("status", "request_sent"));
+    }
+
+    @PostMapping("/rejectLinkRequest/{receiverId}")
+    public ResponseEntity<?> rejectRequest(@PathVariable UUID trainerId, @PathVariable UUID receiverId) {
+        linkSocketHandler.sendToUser(trainerId, Map.of(
+                "type", "link_rejected",
+                "data", Map.of("receiverId", receiverId)
+        ));
+        return ResponseEntity.ok(Map.of("status", "rejected"));
     }
 
     @PutMapping("/{traineeId}")
