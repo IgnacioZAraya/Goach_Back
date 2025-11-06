@@ -8,6 +8,8 @@ import com.goach_backend.goach.logic.entity.gym_trio.gym_trainee.GymTraineeId;
 import com.goach_backend.goach.logic.entity.gym_trio.gym_trainee.GymTraineeRepository;
 import com.goach_backend.goach.logic.entity.user.User;
 import com.goach_backend.goach.logic.entity.user.UserRepository;
+import com.goach_backend.goach.logic.enums.AssocStatus;
+import com.goach_backend.goach.logic.enums.MembershipState;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/gyms/{gymId}/trainees")
+@RequestMapping("/gyms/{gymId}/trainees")
 public class GymTraineeController {
 
     private final GymRepository gymRepository;
@@ -48,25 +50,42 @@ public class GymTraineeController {
      */
     @PostMapping
     @Transactional
-    public ResponseEntity<GymTrainee> create(@PathVariable UUID gymId, @Valid @RequestBody GymTrainee body) {
+    public ResponseEntity<GymTrainee> create(@PathVariable UUID gymId, @RequestBody GymTrainee body) {
         Gym gym = gymRepository.findById(gymId)
                 .orElseThrow(() -> new IllegalArgumentException("Gym no existe"));
 
-        if (body.getTrainee() == null || body.getTrainee().getId() == null)
-            throw new IllegalArgumentException("Debe indicar trainee.id");
+        if (body.getTrainee() == null || body.getTrainee().getEmail() == null)
+            throw new IllegalArgumentException("Debe indicar trainee.email");
 
-        User trainee = userRepository.findById(body.getTrainee().getId())
+        User trainee = userRepository.findByEmail(body.getTrainee().getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no existe"));
 
+        AssocStatus assocStatus;
+        try {
+            assocStatus = AssocStatus.valueOf(body.getAssociateStatus().toString().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Estado de asociación inválido. Valores válidos: ACTIVE, INACTIVE");
+        }
+
+        MembershipState membershipState;
+        try {
+            membershipState = MembershipState.valueOf(body.getMembershipStatus().toString().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Estado de membresía inválido. Valores válidos: PENDING, ACTIVE, SUSPENDED, REMOVED");
+        }
+
         GymTrainee entity = new GymTrainee(gym, trainee);
-        entity.setAssociateStatus(body.getAssociateStatus());
-        entity.setMembershipStatus(body.getMembershipStatus());
+        entity.setAssociateStatus(assocStatus);
+        entity.setMembershipStatus(membershipState);
         entity.setMembershipPrice(body.getMembershipPrice());
+        entity.setMembershipDate(body.getMembershipDate());
 
         GymTrainee saved = gymTraineeRepository.save(entity);
+
         return ResponseEntity.created(URI.create("/api/gyms/" + gymId + "/trainees/" + trainee.getId()))
                 .body(saved);
     }
+
 
     @PutMapping("/{traineeId}")
     @Transactional
@@ -76,6 +95,7 @@ public class GymTraineeController {
         if (body.getAssociateStatus() != null) entity.setAssociateStatus(body.getAssociateStatus());
         if (body.getMembershipStatus() != null) entity.setMembershipStatus(body.getMembershipStatus());
         if (body.getMembershipPrice() != null) entity.setMembershipPrice(body.getMembershipPrice());
+        if (body.getMembershipDate() != null) entity.setMembershipDate(body.getMembershipDate());
         return entity;
     }
 

@@ -16,7 +16,7 @@ public class Gym {
     @Column(name = "gym_id")
     private UUID id;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "owner_id", referencedColumnName = "user_id",nullable = false)
+    @JoinColumn(name = "owner_user_id", referencedColumnName = "user_id", nullable = false)
     private User owner;
     @Column(nullable = false)
     private String name;
@@ -24,7 +24,7 @@ public class Gym {
     @Column(updatable = false, name = "created_at")
     private Date createdAt;
     @UpdateTimestamp
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     private Date updatedAt;
 
     public Gym() {
