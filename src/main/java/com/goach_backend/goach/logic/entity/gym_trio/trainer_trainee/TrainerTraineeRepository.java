@@ -7,5 +7,6 @@ import java.util.UUID;
 
 public interface TrainerTraineeRepository extends JpaRepository<TrainerTrainee, TrainerTraineeId> {
     List<TrainerTrainee> findByTrainer_Id(UUID trainerId);
-    List<TrainerTrainee> findByTrainee_Id(UUID traineeId);
+
+    TrainerTrainee findByTrainee_Id(UUID traineeId);
 }

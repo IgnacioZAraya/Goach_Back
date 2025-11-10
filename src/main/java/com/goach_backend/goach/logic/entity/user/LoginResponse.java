@@ -2,9 +2,11 @@ package com.goach_backend.goach.logic.entity.user;
 
 public class LoginResponse {
     private String token;
-    private User authUser;
+    private String refreshToken; // ✅ add this
     private long expiresIn;
+    private User authUser;
 
+    // Getters and setters
     public String getToken() {
         return token;
     }
@@ -13,12 +15,12 @@ public class LoginResponse {
         this.token = token;
     }
 
-    public User getAuthUser() {
-        return authUser;
+    public String getRefreshToken() {
+        return refreshToken;
     }
 
-    public void setAuthUser(User authUser) {
-        this.authUser = authUser;
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public long getExpiresIn() {
@@ -28,4 +30,13 @@ public class LoginResponse {
     public void setExpiresIn(long expiresIn) {
         this.expiresIn = expiresIn;
     }
+
+    public User getAuthUser() {
+        return authUser;
+    }
+
+    public void setAuthUser(User authUser) {
+        this.authUser = authUser;
+    }
 }
+
