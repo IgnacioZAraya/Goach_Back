@@ -36,19 +36,21 @@ public class AuthRestController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody User user) {
         User authenticatedUser = authenticationService.authenticate(user);
-
-        String jwtToken = jwtService.generateToken(authenticatedUser);
+        
+        String accessToken = jwtService.generateToken(authenticatedUser);
+        String refreshToken = jwtService.generateRefreshToken(authenticatedUser);
 
         LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setToken(jwtToken);
+        loginResponse.setToken(accessToken);
+        loginResponse.setRefreshToken(refreshToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime() / 1000);
 
-        Optional<User> foundedUser = userRepository.findByEmail(user.getEmail());
-
-        foundedUser.ifPresent(loginResponse::setAuthUser);
+        userRepository.findByEmail(user.getEmail())
+                .ifPresent(loginResponse::setAuthUser);
 
         return ResponseEntity.ok(loginResponse);
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
@@ -103,5 +105,20 @@ public class AuthRestController {
         User savedUser = userRepository.save(existingUser);
 
         return ResponseEntity.ok(savedUser);
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+        String username = jwtService.extractUsername(refreshToken);
+
+        var user = userRepository.findByEmail(username).orElseThrow();
+
+        if (jwtService.isTokenValid(refreshToken, user)) {
+            String newAccessToken = jwtService.generateToken(user);
+            return ResponseEntity.ok().body(newAccessToken);
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }

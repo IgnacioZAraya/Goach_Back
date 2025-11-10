@@ -48,9 +48,8 @@ public class TrainerTraineeController {
 
 
     @GetMapping("/{traineeId}")
-    public TrainerTrainee get(@PathVariable UUID trainerId, @PathVariable UUID traineeId) {
-        return trainerTraineeRepository.findById(new TrainerTraineeId(trainerId, traineeId))
-                .orElseThrow(() -> new IllegalArgumentException("Relación trainer-trainee no existe"));
+    public TrainerTrainee get(@PathVariable UUID traineeId) {
+        return trainerTraineeRepository.findByTrainee_Id(traineeId);
     }
 
     /**
@@ -113,7 +112,7 @@ public class TrainerTraineeController {
     @PutMapping("/{traineeId}")
     public TrainerTrainee update(@PathVariable UUID trainerId, @PathVariable UUID traineeId,
                                  @RequestBody TrainerTrainee body) {
-        TrainerTrainee entity = get(trainerId, traineeId);
+        TrainerTrainee entity = get(traineeId);
         if (body.getTraineeStatus() != null) entity.setTraineeStatus(body.getTraineeStatus());
         if (body.getTraineePaymentStatus() != null) entity.setTraineePaymentStatus(body.getTraineePaymentStatus());
         if (body.getTraineePaymentDate() != null) entity.setTraineePaymentDate(body.getTraineePaymentDate());
@@ -128,7 +127,7 @@ public class TrainerTraineeController {
 
     // (Opcional) listar por trainee -> todos sus trainers
     @GetMapping("/by-trainee/{traineeId}")
-    public List<TrainerTrainee> listByTrainee(@PathVariable UUID traineeId) {
+    public TrainerTrainee listByTrainee(@PathVariable UUID traineeId) {
         return trainerTraineeRepository.findByTrainee_Id(traineeId);
     }
 }
