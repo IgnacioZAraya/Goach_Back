@@ -38,7 +38,7 @@ public class ExerciseRestController {
     @PostMapping
     @Transactional
     @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
-    public ResponseEntity<?> createExercise(@Valid @RequestBody Exercise exercise) {
+    public ResponseEntity<?> createExercise(@RequestBody Exercise exercise) {
         List<Exercise> exerciseAux = exerciseRepository.findExerciseByName(exercise.getName());
 
         if (!exerciseAux.isEmpty() && exerciseAux.getFirst().getName().equals(exercise.getName())) {
@@ -71,4 +71,16 @@ public class ExerciseRestController {
         Exercise saved = exerciseRepository.save(e);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+
+    @DeleteMapping("/{exerciseId}")
+    @Transactional
+    @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
+    public ResponseEntity<?> deleteExercise(@PathVariable UUID exerciseId) {
+        Exercise e = exerciseRepository.findById(exerciseId)
+                .orElseThrow(() -> new IllegalArgumentException("This exercise doesn't exist"));
+
+        exerciseRepository.delete(e);
+        return ResponseEntity.noContent().build();
+    }
+
 }

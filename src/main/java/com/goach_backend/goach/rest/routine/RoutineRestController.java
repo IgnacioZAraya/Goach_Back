@@ -38,6 +38,20 @@ public class RoutineRestController {
         return routineRepository.findAll();
     }
 
+    @GetMapping("/{routineId}")
+    public ResponseEntity<?> getRoutineById(@PathVariable UUID routineId) {
+        Optional<Routine> r = routineRepository.findById(routineId);
+
+        if (r.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Routine not found or the provided Id is not valid"));
+        }
+
+        Routine requestedRoutine = r.get();
+
+        return ResponseEntity.ok(requestedRoutine);
+    }
+
     @GetMapping("/filterByName/{name}")
     public List<Routine> getRoutineByName(@PathVariable String name) {
         return routineRepository.findRoutineByName(name);
