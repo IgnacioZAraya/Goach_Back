@@ -8,6 +8,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
@@ -19,12 +20,37 @@ public class LinkSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        var query = session.getUri().getQuery();
-        if (query != null && query.startsWith("userId=")) {
-            UUID userId = UUID.fromString(query.split("=")[1]);
+        String query = session.getUri().getQuery();
+        System.out.println("WS Query: " + query);
+
+        if (query == null) {
+            session.close(CloseStatus.BAD_DATA.withReason("Missing query params"));
+            return;
+        }
+
+        Map<String, String> params = new HashMap<>();
+
+        for (String part : query.split("&")) {
+            String[] kv = part.split("=");
+            if (kv.length == 2) params.put(kv[0], kv[1]);
+        }
+
+        String userIdString = params.get("userId");
+
+        if (userIdString == null) {
+            session.close(CloseStatus.BAD_DATA.withReason("Missing userId"));
+            return;
+        }
+
+        try {
+            UUID userId = UUID.fromString(userIdString.trim());
             sessions.put(userId, session);
+            System.out.println("WS Connected for user: " + userId);
+        } catch (Exception e) {
+            session.close(CloseStatus.BAD_DATA.withReason("Invalid UUID: " + userIdString));
         }
     }
+
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
