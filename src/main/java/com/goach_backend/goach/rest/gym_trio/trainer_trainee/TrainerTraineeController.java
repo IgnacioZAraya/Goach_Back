@@ -5,12 +5,16 @@ import com.goach_backend.goach.logic.entity.gym_trio.trainer_trainee.TrainerTrai
 import com.goach_backend.goach.logic.entity.gym_trio.trainer_trainee.TrainerTraineeRepository;
 import com.goach_backend.goach.logic.entity.user.User;
 import com.goach_backend.goach.logic.entity.user.UserRepository;
+import com.goach_backend.goach.logic.enums.AssocStatus;
+import com.goach_backend.goach.logic.enums.MembershipState;
 import com.goach_backend.goach.logic.sockets.LinkSocketHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 @RestController
@@ -62,8 +66,10 @@ public class TrainerTraineeController {
      * }
      */
     @PostMapping
-    public ResponseEntity<TrainerTrainee> create(@PathVariable UUID trainerId,
-                                                 @RequestBody TrainerTrainee body) {
+    public ResponseEntity<TrainerTrainee> create(
+            @PathVariable UUID trainerId,
+            @RequestBody TrainerTrainee body
+    ) {
         User trainer = userRepository.findById(trainerId)
                 .orElseThrow(() -> new IllegalArgumentException("Trainer no existe"));
 
@@ -74,14 +80,29 @@ public class TrainerTraineeController {
                 .orElseThrow(() -> new IllegalArgumentException("Trainee no existe"));
 
         TrainerTrainee entity = new TrainerTrainee(trainer, trainee);
-        entity.setTraineeStatus(body.getTraineeStatus());
-        entity.setTraineePaymentStatus(body.getTraineePaymentStatus());
-        entity.setTraineePaymentDate(body.getTraineePaymentDate());
+
+        // 🔥 FIX: Evitar nulls en columnas NOT NULL
+        entity.setTraineeStatus(
+                body.getTraineeStatus() != null ? body.getTraineeStatus() : AssocStatus.ACTIVE
+        );
+
+        entity.setTraineePaymentStatus(
+                body.getTraineePaymentStatus() != null ? body.getTraineePaymentStatus() : MembershipState.PENDING
+        );
+
+        entity.setTraineePaymentDate(
+                body.getTraineePaymentDate() != null
+                        ? body.getTraineePaymentDate()
+                        : OffsetDateTime.now()
+        );
 
         TrainerTrainee saved = trainerTraineeRepository.save(entity);
-        return ResponseEntity.created(URI.create("trainers/" + trainerId + "/trainees/" + trainee.getId()))
-                .body(saved);
+
+        return ResponseEntity.created(
+                URI.create("trainers/" + trainerId + "/trainees/" + trainee.getId())
+        ).body(saved);
     }
+
 
     @PostMapping("/linkRequest")
     public ResponseEntity<?> sendLinkRequest(@PathVariable UUID trainerId, @RequestBody User receiver) {
@@ -93,7 +114,7 @@ public class TrainerTraineeController {
                 "data", Map.of(
                         "senderId", sender.getId(),
                         "senderName", sender.getName(),
-                        "receiverId", receiver.getId()
+                        "receiverId", auxReceiver.getId()
                 )
         ));
 
