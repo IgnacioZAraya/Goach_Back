@@ -43,6 +43,16 @@ public class SetController {
         return ResponseEntity.ok(setRepository.findByRoutine_IdOrderBySetNumberAsc(routineId)).getBody();
     }
 
+    @GetMapping("/{setId}")
+    public ResponseEntity<?> getById(@PathVariable UUID setId) {
+        if (!setRepository.existsById(setId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "El set no fue encontrado"));
+        }
+
+        return ResponseEntity.ok(setRepository.findById(setId));
+    }
+
     /**
      * Body mínimo:
      * { "setNumber":1, "minReps":8, "maxReps":10, "restSec":90, "targetPercentRm":75 }
@@ -81,12 +91,12 @@ public class SetController {
                                        @Valid @RequestBody Set body) {
         Set s = setRepository.findById(setId)
                 .orElseThrow(() -> new IllegalArgumentException("Set no existe"));
-        if (!s.getRoutine().getId().equals(routineId)) {
+        if (routineRepository.existsById(routineId)) {
             throw new IllegalArgumentException("El set no pertenece a la rutina");
         }
         if (body.getSetNumber() != null) s.setSetNumber(body.getSetNumber());
         if (body.getWorkTime() != null) s.setWorkTime(body.getWorkTime());
-        if (body.getRestTime() != null) s.setWorkTime(body.getRestTime());
+        if (body.getRestTime() != null) s.setRestTime(body.getRestTime());
         if (body.getTargetRPE() != null) s.setTargetRPE(body.getTargetRPE());
         if (body.getTargetRIR() != null) s.setTargetRIR(body.getTargetRIR());
         if (body.getTargetPRM() != null) s.setTargetPRM(body.getTargetPRM());

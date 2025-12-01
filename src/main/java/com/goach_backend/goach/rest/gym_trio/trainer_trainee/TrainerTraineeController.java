@@ -52,7 +52,7 @@ public class TrainerTraineeController {
 
 
     @GetMapping("/{traineeId}")
-    public TrainerTrainee get(@PathVariable UUID traineeId) {
+    public TrainerTrainee getByTrainee(@PathVariable UUID traineeId) {
         return trainerTraineeRepository.findByTrainee_Id(traineeId);
     }
 
@@ -133,7 +133,7 @@ public class TrainerTraineeController {
     @PutMapping("/{traineeId}")
     public TrainerTrainee update(@PathVariable UUID trainerId, @PathVariable UUID traineeId,
                                  @RequestBody TrainerTrainee body) {
-        TrainerTrainee entity = get(traineeId);
+        TrainerTrainee entity = getByTrainee(traineeId);
         if (body.getTraineeStatus() != null) entity.setTraineeStatus(body.getTraineeStatus());
         if (body.getTraineePaymentStatus() != null) entity.setTraineePaymentStatus(body.getTraineePaymentStatus());
         if (body.getTraineePaymentDate() != null) entity.setTraineePaymentDate(body.getTraineePaymentDate());

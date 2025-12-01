@@ -14,10 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/gym")
@@ -41,13 +39,22 @@ public class GymRestController {
         return gymRepository.findGymByName(name);
     }
 
+    public record UserDTO(UUID id, String name, String email) {
+        public static UserDTO from(User user) {
+            return new UserDTO(user.getId(), user.getName(), user.getEmail());
+        }
+    }
+
+
     public record GymPopulationResponse(
             UUID id,
             String name,
             User owner,
-            int totalPopulation
+            int totalPopulation,
+            List<UserDTO> listAssociates
     ) {
     }
+
 
     @GetMapping("/{ownerId}")
     public ResponseEntity<GymPopulationResponse> get(@PathVariable UUID ownerId) {
@@ -58,7 +65,8 @@ public class GymRestController {
                     null,
                     "",
                     null,
-                    0
+                    0,
+                    new ArrayList<>()
             );
             return ResponseEntity.ok(emptyResponse);
         }
@@ -66,21 +74,24 @@ public class GymRestController {
         List<GymTrainer> trainers = gymTrainerRepository.findByGym_Id(gym.getId());
         List<GymTrainee> trainees = gymTraineeRepository.findByGym_Id(gym.getId());
 
-        List<User> trainerUsers = trainers.stream()
-                .map(GymTrainer::getTrainer)
+        List<UserDTO> trainerUsers = trainers.stream()
+                .map(t -> UserDTO.from(t.getTrainer()))
                 .toList();
 
-        List<User> traineeUsers = trainees.stream()
-                .map(GymTrainee::getTrainee)
+        List<UserDTO> traineeUsers = trainees.stream()
+                .map(t -> UserDTO.from(t.getTrainee()))
                 .toList();
 
-        int totalPopulation = trainerUsers.size() + traineeUsers.size();
+        List<UserDTO> listAssociates = Stream.concat(trainerUsers.stream(), traineeUsers.stream()).toList();
+
+        int totalPopulation = listAssociates.size();
 
         GymPopulationResponse response = new GymPopulationResponse(
                 gym.getId(),
                 gym.getName(),
                 gym.getOwner(),
-                totalPopulation
+                totalPopulation,
+                listAssociates
         );
 
         return ResponseEntity.ok(response);
