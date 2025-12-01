@@ -90,7 +90,7 @@ public class RoutineRestController {
             @PathVariable UUID id,
             @Valid @RequestBody Routine routine) {
 
-        Optional<Routine> auxRoutine = routineRepository.findById(id);
+        Optional<Routine> auxRoutine = routineRepository.findById(routine.getId());
         if (auxRoutine.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Routine not found"));
@@ -98,7 +98,7 @@ public class RoutineRestController {
 
         Routine existingRoutine = auxRoutine.get();
 
-        Optional<User> trainerAux = userRepository.findById(routine.getTrainer().getId());
+        Optional<User> trainerAux = userRepository.findById(id);
         if (trainerAux.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Trainer not found"));
@@ -120,26 +120,16 @@ public class RoutineRestController {
         return ResponseEntity.ok(savedRoutine);
     }
 
-    @PutMapping("delete/{id}")
-    @Transactional
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
-    public ResponseEntity<?> inactivateRoutine(
-            @PathVariable UUID id,
-            @Valid @RequestBody Routine routine) {
-
-        Optional<Routine> auxRoutine = routineRepository.findById(id);
-        if (auxRoutine.isEmpty()) {
+    public ResponseEntity<?> deleteRoutine(@PathVariable UUID id) {
+        if (!routineRepository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Routine not found"));
         }
 
-        Routine existingRoutine = auxRoutine.get();
-
-        existingRoutine.setActive(routine.isActive());
-
-        Routine savedRoutine = routineRepository.save(existingRoutine);
-
-        return ResponseEntity.ok(savedRoutine);
+        routineRepository.deleteById(id);
+        return ResponseEntity.ok(Map.of("message", "Routine permanently deleted"));
     }
 
 }
