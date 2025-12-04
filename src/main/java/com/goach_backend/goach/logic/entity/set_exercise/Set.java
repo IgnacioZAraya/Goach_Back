@@ -37,6 +37,10 @@ public class Set {
     @JsonBackReference(value = "routine-sets")
     private Routine routine;
 
+    @OneToMany(mappedBy = "set", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<SetExercise> setExercises;
+
     @Column(name = "set_number")
     private Integer setNumber;
 
