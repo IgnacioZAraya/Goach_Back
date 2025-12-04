@@ -1,6 +1,7 @@
 package com.goach_backend.goach.logic.entity.workout_sessions;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.goach_backend.goach.logic.entity.gym.Gym;
 import com.goach_backend.goach.logic.entity.routine.Routine;
