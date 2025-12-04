@@ -51,6 +51,7 @@ public class LinkSocketHandler extends TextWebSocketHandler {
         }
     }
 
+
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         sessions.values().removeIf(s -> s.getId().equals(session.getId()));
