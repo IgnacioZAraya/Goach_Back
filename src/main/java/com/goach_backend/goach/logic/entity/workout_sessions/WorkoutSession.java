@@ -1,5 +1,7 @@
 package com.goach_backend.goach.logic.entity.workout_sessions;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.goach_backend.goach.logic.entity.gym.Gym;
 import com.goach_backend.goach.logic.entity.routine.Routine;
 import com.goach_backend.goach.logic.entity.user.User;
@@ -23,6 +25,7 @@ public class WorkoutSession {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "routine_id", referencedColumnName = "routine_id", nullable = false)
+    @JsonBackReference
     private Routine routine;
 
     @OneToOne(fetch = FetchType.EAGER)

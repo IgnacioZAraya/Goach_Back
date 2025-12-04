@@ -1,5 +1,6 @@
 package com.goach_backend.goach.logic.entity.routine;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.goach_backend.goach.logic.entity.set_exercise.SetExercise;
 import com.goach_backend.goach.logic.entity.trainee_routine.TraineeRoutine;
 import com.goach_backend.goach.logic.entity.user.User;
@@ -59,9 +60,11 @@ public class Routine {
     private boolean isActive;
 
     @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<WorkoutSession> workoutSessions = new ArrayList<>();
 
     @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<TraineeRoutine> traineeRoutines = new ArrayList<>();
 
 }

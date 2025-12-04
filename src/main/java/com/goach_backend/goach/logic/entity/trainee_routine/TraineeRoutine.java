@@ -1,5 +1,6 @@
 package com.goach_backend.goach.logic.entity.trainee_routine;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.goach_backend.goach.logic.entity.routine.Routine;
 import com.goach_backend.goach.logic.entity.user.User;
 import jakarta.persistence.*;
@@ -28,6 +29,7 @@ public class TraineeRoutine {
     @MapsId("routineId")
     @JoinColumn(name = "routine_id", referencedColumnName = "routine_id", nullable = false)
     @NotNull(message = "La rutina es obligatoria")
+    @JsonBackReference
     private Routine routine;
 
     @Column(name = "assigned_at", nullable = false)
@@ -45,7 +47,8 @@ public class TraineeRoutine {
     @PastOrPresent(message = "La fecha de actualización debe ser pasada o presente")
     private OffsetDateTime updatedAt;
 
-    public TraineeRoutine() {}
+    public TraineeRoutine() {
+    }
 
     public TraineeRoutine(User trainee, Routine routine, OffsetDateTime assignedAt) {
         this.trainee = trainee;
@@ -54,12 +57,29 @@ public class TraineeRoutine {
         this.assignedAt = assignedAt;
     }
 
-    public TraineeRoutineId getId() { return id; }
-    public User getTrainee() { return trainee; }
-    public Routine getRoutine() { return routine; }
-    public OffsetDateTime getAssignedAt() { return assignedAt; }
-    public OffsetDateTime getCreatedAt() { return createdAt; }
-    public OffsetDateTime getUpdatedAt() { return updatedAt; }
+    public TraineeRoutineId getId() {
+        return id;
+    }
+
+    public User getTrainee() {
+        return trainee;
+    }
+
+    public Routine getRoutine() {
+        return routine;
+    }
+
+    public OffsetDateTime getAssignedAt() {
+        return assignedAt;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
 
     public void setId(TraineeRoutineId id) {
         this.id = id;
@@ -81,5 +101,7 @@ public class TraineeRoutine {
         this.updatedAt = updatedAt;
     }
 
-    public void setAssignedAt(OffsetDateTime assignedAt) { this.assignedAt = assignedAt; }
+    public void setAssignedAt(OffsetDateTime assignedAt) {
+        this.assignedAt = assignedAt;
+    }
 }
