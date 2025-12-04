@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.goach_backend.goach.logic.entity.routine.Routine;
+import com.goach_backend.goach.logic.entity.stats.Stats;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
@@ -33,12 +34,8 @@ public class Set {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "routine_id", referencedColumnName = "routine_id", nullable = false)
-    @JsonBackReference // evita loop al serializar
+    @JsonBackReference(value = "routine-sets")
     private Routine routine;
-
-    @OneToMany(mappedBy = "set", fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<SetExercise> setExercises;
 
     @Column(name = "set_number")
     private Integer setNumber;

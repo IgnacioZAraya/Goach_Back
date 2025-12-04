@@ -2,7 +2,9 @@ package com.goach_backend.goach.logic.entity.set_exercise;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.goach_backend.goach.logic.entity.exercise.Exercise;
+import com.goach_backend.goach.logic.entity.routine.Routine;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PastOrPresent;
@@ -12,6 +14,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Time;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -31,7 +35,7 @@ public class SetExercise {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "set_id", referencedColumnName = "set_id", nullable = false)
-    @JsonBackReference // el set, si la serializas, no vuelve a bajar a sus ejercicios
+    @JsonBackReference
     private Set set;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

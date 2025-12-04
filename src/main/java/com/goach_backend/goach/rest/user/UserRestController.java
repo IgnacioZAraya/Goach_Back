@@ -35,7 +35,6 @@ public class UserRestController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")
     public List<User> getAllUser() {
         return userRepository.findAll();
     }

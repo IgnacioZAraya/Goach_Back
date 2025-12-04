@@ -13,6 +13,6 @@ public interface WorkoutSessionRepository extends JpaRepository<WorkoutSession, 
     List<WorkoutSession> findByTrainee_Email(String email);
 
     @Query("SELECT wss FROM WorkoutSession wss WHERE wss.startedAt BETWEEN :startedAt AND :finishedAt")
-    List<WorkoutSession> findByStartedAtBetweenAndFinishedAt(Date start, Date end);
-
+    List<WorkoutSession> findWorkoutSessionByStartedAtBetweenAndFinishedAt(@Param("startedAt") Date startedAt, @Param("finishedAt") Date finishedAt);
+    List<WorkoutSession> findByRoutine_Id(UUID routineId);
 }
