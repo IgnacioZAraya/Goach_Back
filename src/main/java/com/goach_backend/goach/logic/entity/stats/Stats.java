@@ -11,7 +11,6 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -43,10 +42,10 @@ public class Stats {
     @Column(name = "actual_prm")
     private Float actualPRM;
     @Column(updatable = false, name = "completed_at")
-    private OffsetDateTime completedAt;
+    private Date completedAt;
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
-    private OffsetDateTime createdAt;
+    private Date createdAt;
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
