@@ -31,13 +31,13 @@ public class WorkoutSession {
 
     @Column(updatable = false, name = "started_at")
     private Date startedAt;
-    @Column(updatable = false, name="finished_at")
+    @Column(updatable = false, name = "finished_at")
     private Date finishedAt;
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
     private Date createdAt;
     @UpdateTimestamp
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     private Date updatedAt;
 
     public WorkoutSession() {

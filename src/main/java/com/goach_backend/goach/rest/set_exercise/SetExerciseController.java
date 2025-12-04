@@ -91,34 +91,46 @@ public class SetExerciseController {
         return ResponseEntity.created(URI.create("/sets/" + setId + "/exercises/" + saved.getId())).body(saved);
     }
 
-   /* @PutMapping("/{routineExerciseId}")
+    @PutMapping("/{setExerciseId}")
     @Transactional
-    public SetExercise update(@PathVariable UUID setId,
-                              @PathVariable UUID routineExerciseId,
-                              @Valid @RequestBody SetExercise body) {
-        SetExercise entity = get(setId, routineExerciseId);
+    public ResponseEntity<SetExercise> update(@PathVariable UUID setId,
+                                              @PathVariable UUID setExerciseId,
+                                              @Valid @RequestBody SetExercise body) {
 
-        // si viene exercise.id, lo actualizamos
+        SetExercise entity = setExerciseRepository.findById(setExerciseId)
+                .orElseThrow(() -> new IllegalArgumentException("SetExercise no existe"));
+
+        if (!entity.getSet().getId().equals(setId)) {
+            throw new IllegalArgumentException("SetExercise no pertenece al set indicado");
+        }
+
+
         if (body.getExercise() != null && body.getExercise().getId() != null) {
             Exercise ex = exerciseRepository.findById(body.getExercise().getId())
                     .orElseThrow(() -> new IllegalArgumentException("Exercise no existe"));
             entity.setExercise(ex);
         }
-        if (body.getOrderIndex() != null) entity.setOrderIndex(body.getOrderIndex());
-        if (body.getDuration()!= null) entity.setDuration(body.getDefaultRestSec());
-        if (body.getTargetRpe() != null) entity.setTargetRpe(body.getTargetRpe());
-        if (body.getTargetRir() != null) entity.setTargetRir(body.getTargetRir());
-        if (body.getTempo() != null) entity.setTempo(body.getTempo());
-        if (body.getBlock() != null) entity.setBlock(body.getBlock());
-        if (body.getSupersetGroup() != null) e.setSupersetGroup(body.getSupersetGroup());
 
-        return e;
+        if (body.getOrderIndex() != null) entity.setOrderIndex(body.getOrderIndex());
+        if (body.getDuration() != null) entity.setDuration(body.getDuration());
+        if (body.getMinReps() != null) entity.setMinReps(body.getMinReps());
+        if (body.getMaxReps() != null) entity.setMaxReps(body.getMaxReps());
+        if (body.getMinWeight() != null) entity.setMinWeight(body.getMinWeight());
+        if (body.getMaxWeight() != null) entity.setMaxWeight(body.getMaxWeight());
+
+        if (body.getTargetRPE() != null) entity.setTargetRPE(body.getTargetRPE());
+        if (body.getTargetRIR() != null) entity.setTargetRIR(body.getTargetRIR());
+        if (body.getTargetPRM() != null) entity.setTargetPRM(body.getTargetPRM());
+
+        SetExercise saved = setExerciseRepository.save(entity);
+        return ResponseEntity.ok(saved);
     }
+
 
     @DeleteMapping("/{setExerciseId}")
     public ResponseEntity<Void> delete(@PathVariable UUID setId, @PathVariable UUID setExerciseId) {
         SetExercise e = get(setId, setExerciseId);
         setExerciseRepository.delete(e);
         return ResponseEntity.noContent().build();
-    }*/
+    }
 }

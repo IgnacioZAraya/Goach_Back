@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface WorkoutSessionRepository extends JpaRepository<WorkoutSession, UUID> {
-    @Query("SELECT wss FROM WorkoutSession wss WHERE LOWER(wss.trainee.email) LIKE %?1%")
-    List<WorkoutSession> findWorkoutSessionByTrainee(String character);
+
+    List<WorkoutSession> findByTrainee_Email(String email);
+
     @Query("SELECT wss FROM WorkoutSession wss WHERE wss.startedAt BETWEEN :startedAt AND :finishedAt")
     List<WorkoutSession> findWorkoutSessionByStartedAtBetweenAndFinishedAt(@Param("startedAt") Date startedAt, @Param("finishedAt") Date finishedAt);
     List<WorkoutSession> findByRoutine_Id(UUID routineId);
