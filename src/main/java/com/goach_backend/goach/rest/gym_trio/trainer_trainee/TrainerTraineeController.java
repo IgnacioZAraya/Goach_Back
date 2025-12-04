@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -80,8 +79,7 @@ public class TrainerTraineeController {
                 .orElseThrow(() -> new IllegalArgumentException("Trainee no existe"));
 
         TrainerTrainee entity = new TrainerTrainee(trainer, trainee);
-
-        // 🔥 FIX: Evitar nulls en columnas NOT NULL
+        
         entity.setTraineeStatus(
                 body.getTraineeStatus() != null ? body.getTraineeStatus() : AssocStatus.ACTIVE
         );
@@ -102,7 +100,6 @@ public class TrainerTraineeController {
                 URI.create("trainers/" + trainerId + "/trainees/" + trainee.getId())
         ).body(saved);
     }
-
 
     @PostMapping("/linkRequest")
     public ResponseEntity<?> sendLinkRequest(@PathVariable UUID trainerId, @RequestBody User receiver) {
