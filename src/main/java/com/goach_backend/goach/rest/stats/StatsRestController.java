@@ -30,6 +30,14 @@ public class StatsRestController {
         return ResponseEntity.ok(statsRepository.findAll());
     }
 
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Stats>> getStatsByUser(@PathVariable UUID userId) {
+        List<Stats> stats = statsRepository.findByWorkout_Trainee_Id(userId);
+        return ResponseEntity.ok(stats);
+    }
+
+
     /**
      * GET STATS BY WORKOUT SESSION ID
      */
@@ -68,7 +76,7 @@ public class StatsRestController {
      * CREATE STATS
      */
     @PostMapping
-    public ResponseEntity<?> createStats(@Valid @RequestBody Stats body) {
+    public ResponseEntity<?> createStats(@RequestBody Stats body) {
 
         if (body.getWorkout() == null || body.getWorkout().getId() == null) {
             return ResponseEntity.badRequest().body("Workout session is required");

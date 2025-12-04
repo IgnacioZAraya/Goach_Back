@@ -21,4 +21,7 @@ public interface StatsRepository extends JpaRepository<Stats, UUID> {
     List<Stats> findByWorkout_Id(UUID sessionId);
 
     List<Stats> findByWorkout_Routine_NameAndCompletedAt(String routineName, Date completedAt);
+
+    List<Stats> findByWorkout_Trainee_Id(UUID userId);
+
 }
