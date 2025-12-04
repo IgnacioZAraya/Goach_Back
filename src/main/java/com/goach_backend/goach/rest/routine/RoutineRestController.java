@@ -138,19 +138,7 @@ public class RoutineRestController {
 
         return ResponseEntity.ok(savedRoutine);
     }
-
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
-    public ResponseEntity<?> deleteRoutine(@PathVariable UUID id) {
-        if (!routineRepository.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "Routine not found"));
-        }
-
-        routineRepository.deleteById(id);
-        return ResponseEntity.ok(Map.of("message", "Routine permanently deleted"));
-    }
-
+    
     @DeleteMapping("/{id}")
     @Transactional
     @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")

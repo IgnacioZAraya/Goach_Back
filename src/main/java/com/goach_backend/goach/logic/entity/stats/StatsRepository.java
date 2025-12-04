@@ -12,10 +12,12 @@ import java.util.UUID;
 public interface StatsRepository extends JpaRepository<Stats, UUID> {
     @Query("SELECT stts FROM Stats stts WHERE LOWER(stts.workout) LIKE %?1%")
     List<Stats> findStatsByWorkout(String character);
+
     @Query("SELECT stts FROM Stats stts JOIN FETCH stts.workout wss WHERE wss.routine.name LIKE %:routineName% AND wss.finishedAt = :statsCompletion")
     List<Stats> findStatsByWorkout_RoutineAndCompletedAt(@Param("routineName") String routineName, @Param("statsCompletion") Date completedAt);
-    Optional<Stats> findByWorkout_Id(UUID workoutId);
+
     void deleteByWorkout_Id(UUID workoutId);
+
     List<Stats> findByWorkout_Id(UUID sessionId);
 
     List<Stats> findByWorkout_Routine_NameAndCompletedAt(String routineName, Date completedAt);

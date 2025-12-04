@@ -21,7 +21,7 @@ public class WorkoutSession {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User trainee;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "routine_id", referencedColumnName = "routine_id", nullable = false)
     private Routine routine;
 
