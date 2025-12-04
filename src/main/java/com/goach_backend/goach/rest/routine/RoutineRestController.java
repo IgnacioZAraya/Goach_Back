@@ -59,6 +59,7 @@ public class RoutineRestController {
 
     @GetMapping("/filterByUser/{userId}")
     public ResponseEntity<?> getRoutineByUserId(@PathVariable UUID userId) {
+
         List<Routine> r = routineRepository.findRoutineByTrainerId(userId);
 
         return ResponseEntity.ok(r);
