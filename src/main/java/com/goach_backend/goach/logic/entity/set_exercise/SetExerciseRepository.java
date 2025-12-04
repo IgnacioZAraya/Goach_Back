@@ -22,4 +22,5 @@ public interface SetExerciseRepository extends JpaRepository<SetExercise, UUID> 
             nativeQuery = true
     )
     Double findMaxWeightByRoutineId(@Param("routineId") UUID routineId);
+    List<SetExercise> findBySet_Id(UUID setId);
 }

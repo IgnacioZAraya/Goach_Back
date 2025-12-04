@@ -1,7 +1,9 @@
 package com.goach_backend.goach.logic.entity.stats;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.goach_backend.goach.logic.entity.gym.Gym;
 import com.goach_backend.goach.logic.entity.routine.Routine;
+import com.goach_backend.goach.logic.entity.set_exercise.Set;
 import com.goach_backend.goach.logic.entity.user.User;
 import com.goach_backend.goach.logic.entity.workout_sessions.WorkoutSession;
 import jakarta.persistence.*;

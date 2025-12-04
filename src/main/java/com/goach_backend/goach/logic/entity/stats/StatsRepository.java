@@ -15,4 +15,5 @@ public interface StatsRepository extends JpaRepository<Stats, UUID> {
     @Query("SELECT stts FROM Stats stts JOIN FETCH stts.workout wss WHERE wss.routine.name LIKE %:routineName% AND wss.finishedAt = :statsCompletion")
     List<Stats> findStatsByWorkout_RoutineAndCompletedAt(@Param("routineName") String routineName, @Param("statsCompletion") Date completedAt);
     Optional<Stats> findByWorkout_Id(UUID workoutId);
+    void deleteByWorkout_Id(UUID workoutId);
 }

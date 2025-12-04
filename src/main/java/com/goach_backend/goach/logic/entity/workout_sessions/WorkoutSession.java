@@ -17,15 +17,18 @@ public class WorkoutSession {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "session_id")
     private UUID id;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "trainee_id", referencedColumnName = "user_id",nullable = false)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User trainee;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "routine_id", referencedColumnName = "routine_id",nullable = false)
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "routine_id", referencedColumnName = "routine_id", nullable = false)
     private Routine routine;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gym_id", referencedColumnName = "gym_id")
     private Gym gym;
+
     @Column(updatable = false, name = "started_at")
     private Date startedAt;
     @Column(updatable = false, name="finished_at")

@@ -1,15 +1,21 @@
 package com.goach_backend.goach.logic.entity.routine;
 
+import com.goach_backend.goach.logic.entity.set_exercise.SetExercise;
+import com.goach_backend.goach.logic.entity.trainee_routine.TraineeRoutine;
 import com.goach_backend.goach.logic.entity.user.User;
+import com.goach_backend.goach.logic.entity.workout_sessions.WorkoutSession;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import com.goach_backend.goach.logic.entity.exercise.Exercise;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "Routine")
@@ -24,7 +30,7 @@ public class Routine {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "routine_id")
     private UUID id;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "trainer_id", referencedColumnName = "user_id", nullable = false)
     private User trainer;
     @Column(nullable = false)
@@ -51,4 +57,11 @@ public class Routine {
     private Date updatedAt;
     @Column(name = "is_active")
     private boolean isActive;
+
+    @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WorkoutSession> workoutSessions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TraineeRoutine> traineeRoutines = new ArrayList<>();
+
 }
