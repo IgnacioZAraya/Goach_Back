@@ -30,7 +30,7 @@ public class Routine {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "routine_id")
     private UUID id;
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "trainer_id", referencedColumnName = "user_id", nullable = false)
     private User trainer;
     @Column(nullable = false)

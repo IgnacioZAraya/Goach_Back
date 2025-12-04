@@ -58,7 +58,7 @@ public class WorkoutSessionRestController {
     ) {
 
         List<WorkoutSession> list =
-                workoutSessionRepository.findByStartedAtBetweenAndFinishedAt(start, end);
+                workoutSessionRepository.findByStartedAtBetween(start, end);
 
         if (list.isEmpty()) {
             return ResponseEntity.status(404)
