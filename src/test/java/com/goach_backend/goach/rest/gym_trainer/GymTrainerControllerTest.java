@@ -119,7 +119,6 @@ class GymTrainerControllerTest {
                 .andExpect(status().isInternalServerError());
     }
 
-    // 5️⃣ PUT update OK
     @Test
     void shouldUpdateGymTrainer() throws Exception {
         UUID gymId = UUID.randomUUID();
@@ -174,4 +173,5 @@ class GymTrainerControllerTest {
         mockMvc.perform(delete("/gyms/{gymId}/trainers/{trainerId}", gymId, trainerId))
                 .andExpect(status().isNoContent());
     }
+
 }
