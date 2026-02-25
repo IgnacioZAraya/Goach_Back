@@ -51,6 +51,14 @@ class SetControllerTest {
     @MockitoBean
     private ExerciseRepository exerciseRepository;
 
+    /**
+     * shouldReturnAllSets
+     * <p>
+     * Verifica que el endpoint de listado de sets retorne correctamente
+     * una respuesta HTTP 200 cuando existen registros.
+     * El repositorio es mockeado para devolver una lista simulada,
+     * validando el comportamiento esperado del controlador.
+     */
     @Test
     void shouldReturnAllSets() throws Exception {
         when(setRepository.findAll()).thenReturn(List.of(new Set(), new Set()));
@@ -60,6 +68,13 @@ class SetControllerTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
+    /**
+     * shouldReturnSetById
+     * <p>
+     * Verifica que el controlador pueda recuperar un set existente
+     * cuando se proporciona un identificador válido.
+     * Se espera una respuesta HTTP 200 y el uso correcto del repositorio.
+     */
     @Test
     void shouldReturnSetById() throws Exception {
         UUID setId = UUID.randomUUID();
@@ -70,6 +85,13 @@ class SetControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * shouldReturn404WhenSetNotFound
+     * <p>
+     * Valida el manejo de errores cuando se solicita un set
+     * que no existe en la base de datos.
+     * El sistema debe responder con un estado HTTP 404.
+     */
     @Test
     void shouldReturn404WhenSetNotFound() throws Exception {
         UUID setId = UUID.randomUUID();
@@ -79,6 +101,13 @@ class SetControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * shouldReturnSetsByRoutine
+     * <p>
+     * Valida que el sistema pueda retornar correctamente los sets
+     * asociados a una rutina existente, ordenados por número de set.
+     * Se comprueba que la lógica de filtrado por rutina funcione correctamente.
+     */
     @Test
     void shouldReturnSetsByRoutine() throws Exception {
         UUID routineId = UUID.randomUUID();
@@ -91,6 +120,13 @@ class SetControllerTest {
                 .andExpect(jsonPath("$.length()").value(1));
     }
 
+    /**
+     * shouldReturn404WhenRoutineNotFound
+     * <p>
+     * Prueba un escenario negativo donde se solicita el listado de sets
+     * para una rutina que no existe. El objetivo es validar que el sistema
+     * responda de forma controlada devolviendo un estado HTTP 404.
+     */
     @Test
     void shouldReturn404WhenRoutineNotFound() throws Exception {
         UUID routineId = UUID.randomUUID();
@@ -101,6 +137,13 @@ class SetControllerTest {
                 .andExpect(jsonPath("$[0].error").exists());
     }
 
+    /**
+     * shouldCreateSet
+     * <p>
+     * Comprueba el flujo completo de creación de un set asociado
+     * a una rutina existente. Se valida que el controlador intente
+     * persistir el set y devuelva el objeto creado.
+     */
     @Test
     void shouldCreateSet() throws Exception {
         UUID routineId = UUID.randomUUID();
@@ -122,6 +165,14 @@ class SetControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    /**
+     * shouldUpdateSet
+     * <p>
+     * Verifica que un set existente pueda ser actualizado correctamente
+     * cuando pertenece a la rutina indicada.
+     * Se valida que el controlador procese la solicitud PUT,
+     * persista los cambios y responda con un estado HTTP 201 (Created).
+     */
     @Test
     void shouldUpdateSet() throws Exception {
         UUID setId = UUID.randomUUID();
@@ -140,6 +191,13 @@ class SetControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    /**
+     * shouldDeleteSet
+     * <p>
+     * Verifica que un set existente pueda ser eliminado correctamente
+     * cuando pertenece a la rutina indicada.
+     * Se espera una respuesta HTTP 204 (No Content).
+     */
     @Test
     void shouldDeleteSet() throws Exception {
         UUID setId = UUID.randomUUID();

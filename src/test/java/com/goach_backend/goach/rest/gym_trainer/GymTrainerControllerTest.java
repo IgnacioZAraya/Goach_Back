@@ -54,6 +54,14 @@ class GymTrainerControllerTest {
     @MockitoBean
     private GymTrainerRepository gymTrainerRepository;
 
+    /**
+     * shouldReturnGymTrainerRelation
+     * <p>
+     * Verifica que el controlador pueda retornar correctamente
+     * una relación existente entre un gimnasio y un entrenador
+     * cuando ambos identificadores son válidos.
+     * Se espera una respuesta HTTP 200 (OK).
+     */
     @Test
     void shouldReturnGymTrainerRelation() throws Exception {
         UUID gymId = UUID.randomUUID();
@@ -67,6 +75,14 @@ class GymTrainerControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * shouldFailWhenRelationNotFound
+     * <p>
+     * Prueba un escenario negativo donde se solicita una relación
+     * gym-trainer inexistente.
+     * El repositorio retorna vacío y el controlador lanza una excepción,
+     * resultando en una respuesta HTTP 500.
+     */
     @Test
     void shouldFailWhenRelationNotFound() throws Exception {
         UUID gymId = UUID.randomUUID();
@@ -79,6 +95,14 @@ class GymTrainerControllerTest {
                 .andExpect(status().isInternalServerError());
     }
 
+    /**
+     * shouldCreateGymTrainerRelation
+     * <p>
+     * Valida el flujo positivo de creación de una relación entre
+     * un gimnasio y un entrenador con datos válidos.
+     * Se mockean las dependencias necesarias y se espera
+     * una respuesta HTTP 201 (Created).
+     */
     @Test
     void shouldCreateGymTrainerRelation() throws Exception {
         UUID gymId = UUID.randomUUID();
@@ -105,6 +129,13 @@ class GymTrainerControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    /**
+     * shouldFailWhenGymNotFound
+     * <p>
+     * Prueba un escenario negativo donde se intenta crear una relación
+     * gym-trainer utilizando un gimnasio inexistente.
+     * El sistema debe fallar de forma controlada y responder con HTTP 500.
+     */
     @Test
     void shouldFailWhenGymNotFound() throws Exception {
         UUID gymId = UUID.randomUUID();
@@ -119,6 +150,13 @@ class GymTrainerControllerTest {
                 .andExpect(status().isInternalServerError());
     }
 
+    /**
+     * shouldUpdateGymTrainer
+     * <p>
+     * Verifica que una relación gym-trainer existente pueda ser actualizada
+     * correctamente mediante una petición PUT.
+     * Se valida que el controlador procese los cambios y responda con HTTP 200 (OK).
+     */
     @Test
     void shouldUpdateGymTrainer() throws Exception {
         UUID gymId = UUID.randomUUID();
@@ -139,7 +177,13 @@ class GymTrainerControllerTest {
                 .andExpect(status().isOk());
     }
 
-
+    /**
+     * shouldFailUpdateWhenRelationNotFound
+     * <p>
+     * Prueba un escenario negativo donde se intenta actualizar una relación
+     * gym-trainer que no existe.
+     * El repositorio retorna vacío y el sistema responde con HTTP 500.
+     */
     @Test
     void shouldFailUpdateWhenRelationNotFound() throws Exception {
         UUID gymId = UUID.randomUUID();
@@ -156,6 +200,13 @@ class GymTrainerControllerTest {
                 .andExpect(status().isInternalServerError());
     }
 
+    /**
+     * shouldDeleteGymTrainer
+     * <p>
+     * Verifica que una relación gym-trainer pueda ser eliminada correctamente.
+     * Independientemente de la existencia previa, el endpoint debe responder
+     * con HTTP 204 (No Content).
+     */
     @Test
     void shouldDeleteGymTrainer() throws Exception {
         UUID gymId = UUID.randomUUID();
@@ -165,6 +216,13 @@ class GymTrainerControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    /**
+     * deleteShouldAlwaysReturnNoContent
+     * <p>
+     * Valida que el endpoint de eliminación de relaciones gym-trainer
+     * siempre retorne una respuesta HTTP 204 (No Content),
+     * garantizando un comportamiento idempotente.
+     */
     @Test
     void deleteShouldAlwaysReturnNoContent() throws Exception {
         UUID gymId = UUID.randomUUID();
@@ -173,5 +231,4 @@ class GymTrainerControllerTest {
         mockMvc.perform(delete("/gyms/{gymId}/trainers/{trainerId}", gymId, trainerId))
                 .andExpect(status().isNoContent());
     }
-
 }
