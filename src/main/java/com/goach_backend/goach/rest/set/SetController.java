@@ -91,7 +91,7 @@ public class SetController {
                                        @Valid @RequestBody Set body) {
         Set s = setRepository.findById(setId)
                 .orElseThrow(() -> new IllegalArgumentException("Set no existe"));
-        if (routineRepository.existsById(routineId)) {
+        if (!routineRepository.existsById(routineId)) {
             throw new IllegalArgumentException("El set no pertenece a la rutina");
         }
         if (body.getSetNumber() != null) s.setSetNumber(body.getSetNumber());

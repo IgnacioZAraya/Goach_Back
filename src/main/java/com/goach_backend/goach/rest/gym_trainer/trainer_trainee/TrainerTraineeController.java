@@ -1,4 +1,4 @@
-package com.goach_backend.goach.rest.gym_trio.trainer_trainee;
+package com.goach_backend.goach.rest.gym_trainer.trainer_trainee;
 
 import com.goach_backend.goach.logic.entity.gym_trio.trainer_trainee.TrainerTrainee;
 import com.goach_backend.goach.logic.entity.gym_trio.trainer_trainee.TrainerTraineeId;
@@ -79,7 +79,7 @@ public class TrainerTraineeController {
                 .orElseThrow(() -> new IllegalArgumentException("Trainee no existe"));
 
         TrainerTrainee entity = new TrainerTrainee(trainer, trainee);
-        
+
         entity.setTraineeStatus(
                 body.getTraineeStatus() != null ? body.getTraineeStatus() : AssocStatus.ACTIVE
         );

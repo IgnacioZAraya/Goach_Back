@@ -1,4 +1,4 @@
-package com.goach_backend.goach.rest.gym_trio.gym_trainee;
+package com.goach_backend.goach.rest.gym_trainer.gym_trainee;
 
 
 import com.goach_backend.goach.logic.entity.gym.Gym;

@@ -138,7 +138,7 @@ public class RoutineRestController {
 
         return ResponseEntity.ok(savedRoutine);
     }
-    
+
     @DeleteMapping("/{id}")
     @Transactional
     @PreAuthorize("hasAnyRole('TRAINER', 'ADMIN')")
@@ -160,9 +160,7 @@ public class RoutineRestController {
         for (Set set : sets) {
             // Eliminar SetExercises asociados al set
             List<SetExercise> exercises = setExerciseRepository.findBySet_IdOrderByOrderIndexAsc(set.getId());
-            for (SetExercise se : exercises) {
-                setExerciseRepository.delete(se);
-            }
+            setExerciseRepository.deleteAll(exercises);
 
             // Eliminar el set
             setRepository.delete(set);

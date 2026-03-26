@@ -88,7 +88,7 @@ public class SetExerciseController {
                 .build();
 
         SetExercise saved = setExerciseRepository.save(entity);
-        return ResponseEntity.created(URI.create("/sets/" + setId + "/exercises/" + saved.getId())).body(saved);
+        return ResponseEntity.created(URI.create("/set/" + setId + "/exercises/")).body(saved);
     }
 
     @PutMapping("/{setExerciseId}")
