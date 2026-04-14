@@ -70,7 +70,7 @@ public class RoutineTests {
 
         String requestBody = """
                 {
-                    "name": "Rutina Hipertrofia",
+                    "name": "Rutina Cardio",
                     "trainer": {"id": "%s"}
                 }
                 """.formatted(realTrainerId);
