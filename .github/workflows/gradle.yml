@@ -72,5 +72,7 @@ jobs:
           done
           exit 1
 
-      - name: Run Tests
-        run: ./gradlew clean test
+      - name: Build and Test
+        run: |
+          chmod +x gradlew
+          ./gradlew clean test
