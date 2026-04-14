@@ -1,9 +1,7 @@
-package com.goach_backend.goach.rest.gym_trio.gym_trainer;
+package com.goach_backend.goach.rest.gym_trainer.gym_trainer;
 
 import com.goach_backend.goach.logic.entity.gym.Gym;
 import com.goach_backend.goach.logic.entity.gym.GymRepository;
-import com.goach_backend.goach.logic.entity.gym_trio.gym_trainee.GymTrainee;
-import com.goach_backend.goach.logic.entity.gym_trio.gym_trainee.GymTraineeRepository;
 import com.goach_backend.goach.logic.entity.gym_trio.gym_trainer.GymTrainer;
 import com.goach_backend.goach.logic.entity.gym_trio.gym_trainer.GymTrainerId;
 import com.goach_backend.goach.logic.entity.gym_trio.gym_trainer.GymTrainerRepository;
@@ -16,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RestController

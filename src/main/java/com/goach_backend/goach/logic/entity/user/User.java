@@ -1,6 +1,7 @@
 package com.goach_backend.goach.logic.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.goach_backend.goach.logic.entity.role.RoleEnum;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
