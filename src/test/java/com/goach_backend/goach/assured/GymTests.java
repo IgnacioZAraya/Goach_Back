@@ -109,7 +109,7 @@ public class GymTests {
     public void testCreateGym_OwnerNotSpecified() {
         String requestBody = """
                 {
-                    "name":"WaluiGym"
+                    "name":"WaluiGyms"
                 }
                 """;
         given()
