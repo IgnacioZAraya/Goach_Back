@@ -25,7 +25,7 @@ jobs:
         with:
           args: --baseline,qodana-baseline.json
         env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1618691014 }}
 
   build:
     runs-on: ubuntu-latest
