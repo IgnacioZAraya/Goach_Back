@@ -67,17 +67,6 @@ jobs:
             /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "Pokemon.2012" \
             -Q "IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'goach') CREATE DATABASE goach" -No
 
-      - name: Seed Test Data
-        run: |
-          docker exec $(docker ps -qf "ancestor=mcr.microsoft.com/mssql/server:2022-latest") \
-          /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${{ secrets.SA_PASSWORD }}" \
-          -d goach -Q "
-            INSERT INTO Users (id, email, password, role) VALUES 
-            ('70125a08-9693-4873-89ec-1ecd7b0f595e', 'izeladaa@ucenfotec.ac.cr', '<password_hash>', 'ADMIN');
-            INSERT INTO Gym (id, name, owner_id) VALUES
-            ('368ca9f8-13f1-4b6e-9c48-4252c00a22b0', 'TestGym', '70125a08-9693-4873-89ec-1ecd7b0f595e');
-          " -No
-
       - name: Build and Test
         run: |
           chmod +x gradlew
