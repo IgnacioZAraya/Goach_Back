@@ -67,3 +67,4 @@ jobs:
           SPRING_DATASOURCE_PASSWORD: "Pokemon.2012"
           SPRING_JPA_HIBERNATE_DDL_AUTO: create
           SPRING_SQL_INIT_MODE: never
+          SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.SQLServerDialect
