@@ -64,7 +64,7 @@ jobs:
       - name: Create Database
         run: |
           docker exec $(docker ps -qf "ancestor=mcr.microsoft.com/mssql/server:2022-latest") \
-            /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${{ secrets.SA_PASSWORD }}" \
+            /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "Pokemon.2012" \
             -Q "IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'goach') CREATE DATABASE goach" -No
 
       - name: Seed Test Data
