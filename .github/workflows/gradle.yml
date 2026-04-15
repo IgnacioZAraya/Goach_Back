@@ -61,22 +61,18 @@ jobs:
           distribution: 'corretto'
           cache: gradle
 
-      - name: Wait for SQL Server
+      - name: Create Database
         run: |
-          for i in {1..15}; do
-            docker exec $(docker ps -qf "ancestor=mcr.microsoft.com/mssql/server:2022-latest") \
-              /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Pokemon.2012' -Q "SELECT 1" -No \
-              && echo "SQL Server ready" && exit 0
-            echo "Waiting for SQL Server... attempt $i"
-            sleep 5
-          done
-          exit 1
+          docker exec $(docker ps -qf "ancestor=mcr.microsoft.com/mssql/server:2022-latest") \
+            /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${{ secrets.SA_PASSWORD }}" \
+            -Q "IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'goach') CREATE DATABASE goach" -No
 
       - name: Build and Test
         run: |
           chmod +x gradlew
           ./gradlew clean test
         env:
-          SPRING_DATASOURCE_URL: jdbc:sqlserver://localhost:1433;databaseName=master;encrypt=false;trustServerCertificate=true
+          SPRING_DATASOURCE_URL: jdbc:sqlserver://localhost:1433;databaseName=goach;encrypt=false;trustServerCertificate=true
           SPRING_DATASOURCE_USERNAME: sa
           SPRING_DATASOURCE_PASSWORD: "Pokemon.2012"
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
