@@ -50,3 +50,4 @@ jobs:
           SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.H2Dialect
           SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
           SPRING_SQL_INIT_MODE: never
+          SPRING_PROFILES_ACTIVE: test
