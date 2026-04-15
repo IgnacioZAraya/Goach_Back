@@ -11,8 +11,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile("!test")
 public class ApplicationConfiguration {
 
     @Autowired
