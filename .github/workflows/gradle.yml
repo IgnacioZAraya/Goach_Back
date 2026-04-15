@@ -42,7 +42,7 @@ jobs:
           --health-timeout 10s
           --health-retries 10
         env:
-          SA_PASSWORD: ${{ secrets.SA_PASSWORD }}
+          SA_PASSWORD: "Pokemon.2012"
           ACCEPT_EULA: "Y"
 
     env:
@@ -76,3 +76,7 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew clean test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:sqlserver://localhost:1433;databaseName=master;encrypt=false;trustServerCertificate=true
+          SPRING_DATASOURCE_USERNAME: sa
+          SPRING_DATASOURCE_PASSWORD: "Pokemon.2012"
