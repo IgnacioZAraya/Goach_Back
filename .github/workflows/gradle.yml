@@ -1,4 +1,5 @@
 name: Goach CI with Gradle
+
 on:
   push:
     branches: [ "develop" ]
@@ -6,17 +7,20 @@ on:
 jobs:
   qodana:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Set up JDK 24
         uses: actions/setup-java@v4
         with:
           java-version: '24'
           distribution: 'corretto'
           cache: gradle
+
       - name: Qodana Scan
         uses: JetBrains/qodana-action@v2025.1
         with:
@@ -27,16 +31,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs: qodana
+
     services:
       sqlserver:
         image: mcr.microsoft.com/mssql/server:2022-latest
         ports:
           - 1433:1433
-        options: >-
-          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Pokemon.2012' -Q 'SELECT 1' -No"
-          --health-interval 20s
-          --health-timeout 10s
-          --health-retries 10
         env:
           SA_PASSWORD: "Pokemon.2012"
           ACCEPT_EULA: "Y"
@@ -52,13 +52,23 @@ jobs:
           distribution: 'corretto'
           cache: gradle
 
+      - name: Wait for SQL Server
+        run: |
+          echo "Waiting for SQL Server to be ready..."
+          for i in {1..20}; do
+            docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd \
+              -S localhost -U sa -P "Pokemon.2012" -Q "SELECT 1" && break
+            echo "Still waiting..."
+            sleep 5
+          done
+
       - name: Create Database
         run: |
-          docker exec $(docker ps -qf "ancestor=mcr.microsoft.com/mssql/server:2022-latest") \
-            /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "Pokemon.2012" \
-            -Q "IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'goach') CREATE DATABASE goach" -No
+          docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd \
+            -S localhost -U sa -P "Pokemon.2012" \
+            -Q "IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'goach') CREATE DATABASE goach"
 
-      - name: Build and Test
+      - name: Run Tests
         run: |
           chmod +x gradlew
           ./gradlew clean test
@@ -67,5 +77,5 @@ jobs:
           SPRING_DATASOURCE_USERNAME: sa
           SPRING_DATASOURCE_PASSWORD: "Pokemon.2012"
           SPRING_JPA_HIBERNATE_DDL_AUTO: create
-          SPRING_SQL_INIT_MODE: always
+          SPRING_SQL_INIT_MODE: never
           SPRING_JPA_DEFER_DATASOURCE_INITIALIZATION: "true"
