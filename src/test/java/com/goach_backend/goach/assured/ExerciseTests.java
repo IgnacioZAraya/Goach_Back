@@ -51,7 +51,7 @@ public class ExerciseTests {
 
         String requestBody = """
                 {
-                    "name":"SUPERMAN RETURNS",
+                    "name":"SUPERMAN RETURN",
                     "muscleGroup": "FRONT_DELTOIDS",
                     "description": "Destroy your upper body like the 1930's Superman destroyed cars!"
                 }
